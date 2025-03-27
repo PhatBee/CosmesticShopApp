@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "vn.phatbee.cosmesticshopapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "vn.phatbee.cosmesticshopapp"
@@ -24,6 +24,9 @@ android {
                 "proguard-rules.pro"
             )
         }
+    }
+    buildFeatures{
+        viewBinding = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

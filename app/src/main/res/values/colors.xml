@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="hong1">#dbb7b7</color>
+    <color name="hong2">#f8b2bc</color>
+    <color name="tim1">#d1c2e6</color>
+    <color name="tim2">#9077c8</color>
 </resources>
