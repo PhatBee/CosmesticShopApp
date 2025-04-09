@@ -6,9 +6,13 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import vn.phatbee.cosmesticshopapp.model.Banner;
 import vn.phatbee.cosmesticshopapp.model.LoginRequest;
 import vn.phatbee.cosmesticshopapp.model.LoginResponse;
+import vn.phatbee.cosmesticshopapp.model.OtpVerificationRequest;
+import vn.phatbee.cosmesticshopapp.model.RegistrationRequest;
+import vn.phatbee.cosmesticshopapp.model.RegistrationResponse;
 
 public interface ApiService {
     @GET("api/banners")
@@ -16,4 +20,13 @@ public interface ApiService {
 
     @POST("api/auth/login")
     Call<LoginResponse> loginUser(@Body LoginRequest loginRequest);
+
+    @POST("api/auth/register")
+    Call<RegistrationResponse> register(@Body RegistrationRequest request);
+
+    @POST("api/auth/verify-otp")
+    Call<RegistrationResponse> verifyOtp(@Body OtpVerificationRequest request);
+
+    @POST("api/auth/resend-otp")
+    Call<RegistrationResponse> resendOtp(@Query("email") String email);
 }

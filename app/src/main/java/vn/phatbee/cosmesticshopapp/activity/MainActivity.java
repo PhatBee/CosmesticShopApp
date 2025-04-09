@@ -1,9 +1,11 @@
 package vn.phatbee.cosmesticshopapp.activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +26,8 @@ import vn.phatbee.cosmesticshopapp.retrofit.ApiService;
 import vn.phatbee.cosmesticshopapp.retrofit.RetrofitClient;
 
 public class MainActivity extends AppCompatActivity {
+    private TextView tvUsername;
+    private SharedPreferences sharedPreferences;
     private ViewPager2 viewPagerSlider;
     private DotsIndicator dotsIndicator;
     private ProgressBar progressBarBanner;
@@ -38,9 +42,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Initialize views
+        dotsIndicator = findViewById(R.id.dotsIndicator);
         viewPagerSlider = findViewById(R.id.viewPager2);
         dotsIndicator = findViewById(R.id.dotsIndicator);
         progressBarBanner = findViewById(R.id.progressBar2);
+        tvUsername = findViewById(R.id.tvUsername);
 
         // Set up adapter
         bannerAdapter = new BannerAdapter(this, banners);
@@ -54,6 +60,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Auto-scroll feature
         setupAutoScroll();
+
+        // Update username from SharedPreferences
+        sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+        String username = sharedPreferences.getString("username", "");
+        tvUsername.setText(username);
 
     }
 

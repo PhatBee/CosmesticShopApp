@@ -88,6 +88,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        textViewRegister.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
+        });
+
     }
 
     private void loginUser(String username, String password){
