@@ -8,6 +8,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import vn.phatbee.cosmesticshopapp.model.Banner;
+import vn.phatbee.cosmesticshopapp.model.Category;
 import vn.phatbee.cosmesticshopapp.model.ForgotPasswordRequest;
 import vn.phatbee.cosmesticshopapp.model.LoginRequest;
 import vn.phatbee.cosmesticshopapp.model.LoginResponse;
@@ -41,4 +42,7 @@ public interface ApiService {
 
     @POST("api/auth/resend-password-reset-otp")
     Call<PasswordResetResponse> resendPasswordResetOtp(@Query("email") String email);
+
+    @GET("api/categories")
+    Call<List<Category>> getCategories();
 }
