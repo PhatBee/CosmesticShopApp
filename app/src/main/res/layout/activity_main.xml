@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/xanh1"
+    android:background="@drawable/bg_gradient"
     tools:context=".activity.MainActivity">
 
     <ScrollView
@@ -43,13 +43,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Welcome Back"
-                        android:textSize="20dp"/>
+                        android:textSize="20sp"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Tama"
-                        android:textSize="25dp"
+                        android:textSize="25sp"
                         android:textStyle="bold"/>
                 </LinearLayout>
 
@@ -138,14 +138,14 @@
                     android:layout_weight="1"
                     android:text="Danh mục"
                     android:textColor="@color/white"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:text="Xem tất cả" />
+                    android:text="Xem tất cả"
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 
@@ -190,7 +190,7 @@
                     android:layout_weight="1"
                     android:text="Gợi ý"
                     android:textColor="@color/white"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -243,7 +243,7 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_gravity="bottom"
-            android:background="@drawable/bg_blue">
+            android:background="@android:color/transparent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -254,6 +254,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.2"
+                    android:background="@android:color/transparent"
                     android:orientation="vertical">
 
                     <ImageView

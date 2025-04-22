@@ -2,9 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="hong1">#dbb7b7</color>
-    <color name="hong2">#f8b2bc</color>
-    <color name="tim1">#d1c2e6</color>
-    <color name="xanh1">#98caeb</color>
-    <color name="xanh2">#6ec2f7</color>
+    <color name="xanh1">#147E9E</color>
+    <color name="xanh2">#1AA2CC</color>
+    <color name="xanh3">#1AA2CC</color>
 </resources>
