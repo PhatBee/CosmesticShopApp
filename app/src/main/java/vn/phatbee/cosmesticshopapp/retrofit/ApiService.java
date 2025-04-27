@@ -6,6 +6,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import vn.phatbee.cosmesticshopapp.model.Banner;
 import vn.phatbee.cosmesticshopapp.model.Category;
@@ -14,6 +15,7 @@ import vn.phatbee.cosmesticshopapp.model.LoginRequest;
 import vn.phatbee.cosmesticshopapp.model.LoginResponse;
 import vn.phatbee.cosmesticshopapp.model.OtpVerificationRequest;
 import vn.phatbee.cosmesticshopapp.model.PasswordResetResponse;
+import vn.phatbee.cosmesticshopapp.model.Product;
 import vn.phatbee.cosmesticshopapp.model.RegistrationRequest;
 import vn.phatbee.cosmesticshopapp.model.RegistrationResponse;
 import vn.phatbee.cosmesticshopapp.model.ResetPasswordRequest;
@@ -45,4 +47,7 @@ public interface ApiService {
 
     @GET("api/categories")
     Call<List<Category>> getCategories();
+
+    @GET("api/products/category/{categoryId}")
+    Call<List<Product>> getProductsByCategory(@Path("categoryId") int categoryId);
 }
