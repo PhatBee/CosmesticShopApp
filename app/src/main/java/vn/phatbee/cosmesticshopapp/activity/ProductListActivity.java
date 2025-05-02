@@ -103,7 +103,7 @@ public class ProductListActivity extends AppCompatActivity implements ProductAda
     @Override
     public void onProductClick(Product product) {
         // Handle product click, for example navigate to product detail
-        Intent intent = new Intent(this, ProductDetailActivity.class);
+        Intent intent = new Intent(this, ProductDetailsActivity.class);
         intent.putExtra("PRODUCT_ID", product.getProductId());
         startActivity(intent);
     }

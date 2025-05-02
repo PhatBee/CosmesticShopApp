@@ -16,10 +16,16 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activity.ProductDetailActivity"
+            android:name=".activity.EditAccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".activity.ProductListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SplashActivity"
             android:exported="false" />
         <activity
             android:name=".activity.ResetPasswordActivity"
@@ -37,10 +43,10 @@
             android:name=".activity.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.ProductDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.SplashActivity"
+            android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
