@@ -10,8 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
         <!-- Header Section -->
 
@@ -91,7 +90,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@drawable/bg_white"
                 android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -107,17 +106,25 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@drawable/bg_white"
                 android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Phone Number Checkbox -->
-        <CheckBox
+        <!-- Phone Number Input -->
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Phone number"
-            android:textSize="16sp"
-            android:layout_marginBottom="16dp"/>
+            android:hint="Phone Number"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:boxStrokeColor="#9E9E9E"
+            android:layout_marginBottom="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_white"
+                android:inputType="number"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Gender Selection -->
         <com.google.android.material.textfield.TextInputLayout
@@ -132,7 +139,7 @@
                 android:id="@+id/gender_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@drawable/bg_white"
                 android:inputType="none"
                 tools:ignore="SpeakableTextPresentCheck" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -143,15 +150,16 @@
             android:layout_height="wrap_content"
             android:hint="What is your date of birth?"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:background="@color/white"
+            android:background="@drawable/bg_white"
             android:layout_marginBottom="24dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_dob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="date"
-                android:focusable="false"/>
+                android:focusable="false"
+                android:inputType="date" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Update Profile Button -->
