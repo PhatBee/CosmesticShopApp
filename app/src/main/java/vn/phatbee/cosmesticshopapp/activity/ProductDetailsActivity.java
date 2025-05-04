@@ -29,7 +29,7 @@ import vn.phatbee.cosmesticshopapp.retrofit.RetrofitClient;
 
 public class ProductDetailsActivity extends AppCompatActivity {
 
-    private ImageButton btnback;
+    private ImageView btnback;
     private ImageView btnWish, btnCart;
     private ImageView iProduct;
     private TextView tvProductName, tvCategory, tvPrice, tvBrand, tvVolume;
@@ -37,7 +37,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private TextView tvDescription, tvHowToUse, tvIngredients;
     private Toolbar toolbar;
     private Product currentProduct;
-    private int productId;
+    private Long productId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         anhXa();
 
-        productId = getIntent().getIntExtra("PRODUCT_ID", -1);
+        productId = getIntent().getLongExtra("PRODUCT_ID", -1);
         if (productId == -1) {
             finish();
             return;
@@ -63,7 +63,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     }
     void anhXa(){
-        btnback = findViewById(R.id.ibtnBack);
+        btnback = findViewById(R.id.ivBack);
         iProduct = findViewById(R.id.iProduct);
         btnWish = findViewById(R.id.ibtnWish);
         btnCart = findViewById(R.id.ibtnCart);

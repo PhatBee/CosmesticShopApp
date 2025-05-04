@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.O
     private RecyclerView rvCategories;
     private ProgressBar progressBarCategory;
     private CategoryAdapter categoryAdapter;
+    private ImageView ivGioHang;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.O
         dotsIndicator = findViewById(R.id.dotsIndicator);
         progressBarBanner = findViewById(R.id.progressBar2);
         tvUsername = findViewById(R.id.tvUsername);
+        ivGioHang = findViewById(R.id.ivGioHang);
 
         rvCategories = findViewById(R.id.rvDanhMuc);
         progressBarCategory = findViewById(R.id.progressBar3);
@@ -90,6 +93,11 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.O
         sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
         String username = sharedPreferences.getString("username", "");
         tvUsername.setText(username);
+
+        ivGioHang.setOnClickListener( v -> {
+            Intent intent = new Intent(MainActivity.this, CartActivity.class);
+            startActivity(intent);
+        });
 
     }
 
