@@ -13,7 +13,6 @@ import retrofit2.http.Query;
 import vn.phatbee.cosmesticshopapp.model.Banner;
 import vn.phatbee.cosmesticshopapp.model.Cart;
 import vn.phatbee.cosmesticshopapp.model.CartItemRequest;
-import vn.phatbee.cosmesticshopapp.model.CartResponse;
 import vn.phatbee.cosmesticshopapp.model.Category;
 import vn.phatbee.cosmesticshopapp.model.ForgotPasswordRequest;
 import vn.phatbee.cosmesticshopapp.model.LoginRequest;
@@ -24,6 +23,9 @@ import vn.phatbee.cosmesticshopapp.model.Product;
 import vn.phatbee.cosmesticshopapp.model.RegistrationRequest;
 import vn.phatbee.cosmesticshopapp.model.RegistrationResponse;
 import vn.phatbee.cosmesticshopapp.model.ResetPasswordRequest;
+import vn.phatbee.cosmesticshopapp.model.User;
+import vn.phatbee.cosmesticshopapp.model.UserUpdateDTO;
+import vn.phatbee.cosmesticshopapp.model.UserUpdateResponse;
 
 public interface ApiService {
     @GET("api/banners")
@@ -73,4 +75,10 @@ public interface ApiService {
 
     @DELETE("api/cart/clear/{userId}")
     Call<Void> clearCart(@Path("userId") Long userId);
+
+    @GET("/api/user/{userId}")
+    Call<User> getUser(@Path("userId") Long userId);
+
+    @PUT("/api/user/{userId}")
+    Call<UserUpdateResponse> updateUser(@Path("userId") Long userId, @Body UserUpdateDTO userUpdateDTO);
 }

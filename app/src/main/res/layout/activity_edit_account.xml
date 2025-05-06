@@ -13,7 +13,6 @@
         android:orientation="vertical">
 
         <!-- Header Section -->
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
@@ -43,10 +42,10 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- Name Section -->
+        <!-- Profile Section -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <ImageView
@@ -58,6 +57,7 @@
                 tools:srcCompat="@drawable/ic_account" />
 
             <TextView
+                android:id="@+id/tvFullName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -66,6 +66,7 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/tvEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
@@ -76,34 +77,18 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <!-- Email Section -->
-
-        <!-- First Name Input -->
+        <!-- Full Name Input -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilFullName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="What's your first name?"
+            android:hint="What's your full name?"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:boxStrokeColor="#9E9E9E"
             android:layout_marginBottom="16dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_white"
-                android:inputType="textPersonName"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Last Name Input -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="And your last name?"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:boxStrokeColor="#9E9E9E"
-            android:layout_marginBottom="16dp">
-
-            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etFullName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_white"
@@ -112,6 +97,7 @@
 
         <!-- Phone Number Input -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Phone Number"
@@ -120,14 +106,16 @@
             android:layout_marginBottom="16dp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_white"
-                android:inputType="number"/>
+                android:inputType="phone"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Gender Selection -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilGender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Select your gender"
@@ -146,24 +134,19 @@
 
         <!-- Date of Birth Picker -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilDob"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="What is your date of birth?"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:background="@drawable/bg_white"
+            app:boxStrokeColor="#9E9E9E"
             android:layout_marginBottom="24dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_dob"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:inputType="date" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Update Profile Button -->
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnUpdateProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Update Profile"

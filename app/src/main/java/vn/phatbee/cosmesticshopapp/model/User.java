@@ -1,12 +1,33 @@
 package vn.phatbee.cosmesticshopapp.model;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 public class User {
     private Long userId;
     private String username;
+    private String fullName;
+    private String phone;
     private String password;
     private String email;
     private String gender;
     private String image;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 
     public User() {
 
