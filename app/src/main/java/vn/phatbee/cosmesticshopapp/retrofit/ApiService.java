@@ -4,11 +4,16 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import vn.phatbee.cosmesticshopapp.model.Banner;
+import vn.phatbee.cosmesticshopapp.model.Cart;
+import vn.phatbee.cosmesticshopapp.model.CartItemRequest;
+import vn.phatbee.cosmesticshopapp.model.CartResponse;
 import vn.phatbee.cosmesticshopapp.model.Category;
 import vn.phatbee.cosmesticshopapp.model.ForgotPasswordRequest;
 import vn.phatbee.cosmesticshopapp.model.LoginRequest;
@@ -52,5 +57,20 @@ public interface ApiService {
     Call<List<Product>> getProductsByCategory(@Path("categoryId") int categoryId);
 
     @GET("api/products/{productId}")
-    Call<Product> getProductDetails(@Path("productId") int productId);
+    Call<Product> getProductDetails(@Path("productId") Long productId);
+
+    @GET("api/cart/user/{userId}")
+    Call<Cart> getCart(@Path("userId") Long userId);
+
+    @POST("api/cart/add")
+    Call<Cart> addToCart(@Body CartItemRequest request);
+
+    @PUT("api/cart/update")
+    Call<Cart> updateCartItem(@Body CartItemRequest request);
+
+    @DELETE("api/cart/remove/{userId}/{cartItemId}")
+    Call<Cart> removeFromCart(@Path("userId") Long userId, @Path("cartItemId") Long cartItemId);
+
+    @DELETE("api/cart/clear/{userId}")
+    Call<Void> clearCart(@Path("userId") Long userId);
 }

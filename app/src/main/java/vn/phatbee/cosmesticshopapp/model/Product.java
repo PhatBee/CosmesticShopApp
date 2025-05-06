@@ -1,7 +1,7 @@
 package vn.phatbee.cosmesticshopapp.model;
 
 public class Product {
-        private int productId;
+        private Long productId;
         private Category category;
         private String productName;
         private String productCode;
@@ -17,11 +17,11 @@ public class Product {
         private String description;
         private String volume;
 
-    public int getProductId() {
+    public Long getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(Long productId) {
         this.productId = productId;
     }
 
