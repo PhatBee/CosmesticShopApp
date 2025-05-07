@@ -1,10 +1,13 @@
 package vn.phatbee.cosmesticshopapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -30,6 +33,7 @@ public class AddressListActivity extends AppCompatActivity {
     private ImageView ivBack;
     private UserSessionManager sessionManager;
     private ApiService apiService;
+    private Button btnAddNewAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,17 @@ public class AddressListActivity extends AppCompatActivity {
 
         lvAddresses = findViewById(R.id.lvAddresses);
         ivBack = findViewById(R.id.ivBack);
+
+        btnAddNewAddress = findViewById(R.id.btnAddAddress);
+        btnAddNewAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle the click event here
+                Intent intent = new Intent(AddressListActivity.this, AddAddressActivity.class);
+                startActivity(intent);
+            }
+        });
+
         sessionManager = new UserSessionManager(this);
         apiService = RetrofitClient.getClient().create(ApiService.class);
 
