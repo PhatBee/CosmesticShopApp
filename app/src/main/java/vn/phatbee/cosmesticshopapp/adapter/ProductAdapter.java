@@ -1,6 +1,7 @@
 package vn.phatbee.cosmesticshopapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import vn.phatbee.cosmesticshopapp.R;
+import vn.phatbee.cosmesticshopapp.activity.ProductDetailsActivity;
 import vn.phatbee.cosmesticshopapp.model.Product;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder>{
@@ -49,7 +51,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             if (listener != null) {
                 listener.onProductClick(product);
             }
+            Intent intent = new Intent(context, ProductDetailsActivity.class);
+            intent.putExtra("PRODUCT_ID", product.getProductId());
+            context.startActivity(intent);
         });
+
     }
 
     public void updateProductList(List<Product> newProductList) {
