@@ -37,9 +37,8 @@
 
                 <ImageView
                     android:id="@+id/iProduct"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
                     app:layout_constraintBottom_toBottomOf="parent"
 
                     app:layout_constraintEnd_toEndOf="parent"

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/xanh1">
+    android:background="@color/xanh3">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -112,7 +112,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:background="@drawable/bg_blue"
+                android:background="@drawable/bg_blue3"
                 android:text="Login"
                 android:textColor="@color/white"
                 android:textSize="20dp"

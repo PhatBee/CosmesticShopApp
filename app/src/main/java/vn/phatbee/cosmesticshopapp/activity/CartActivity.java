@@ -76,8 +76,10 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.CartI
         // Setup listeners
         setupListeners();
 
-        // Load cart data
+        // Load cart dataget
         loadCartData();
+
+
     }
 
     private void initializeViews() {
@@ -121,6 +123,11 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.CartI
             // Navigate to checkout activity (uncomment when implemented)
             // Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
             // startActivity(intent);
+
+            //Pass the selected items to CheckoutActivity
+            Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
+            intent.putExtra("selectedCartItems", new ArrayList<>(selectedItems));
+            startActivity(intent);
         });
 
         // Handle Start Shopping button (when cart is empty)

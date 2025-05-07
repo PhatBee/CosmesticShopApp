@@ -199,6 +199,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     tools:listitem="@layout/row_item_checkout" />
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
