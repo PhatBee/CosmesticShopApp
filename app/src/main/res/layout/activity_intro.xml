@@ -5,8 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/xanh1"
-    android:backgroundTint="@color/xanh1"
+    android:background="@color/xanh3"
+    android:backgroundTint="@color/xanh3"
     tools:context=".activity.IntroActivity">
 
     <ScrollView
@@ -50,7 +50,7 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnIntro"
                 style="@android:style/Widget.Button"
-                android:background="@drawable/bg_blue"
+                android:background="@drawable/bg_blue3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Bắt đầu"

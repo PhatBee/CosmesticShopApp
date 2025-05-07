@@ -102,6 +102,7 @@
             android:focusable="true">
 
             <TextView
+                android:id="@+id/tvMyAccount"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -160,7 +161,7 @@
                 android:textColor="#FF0000" />
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/ivLogout"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:srcCompat="@drawable/ic_logout" />
