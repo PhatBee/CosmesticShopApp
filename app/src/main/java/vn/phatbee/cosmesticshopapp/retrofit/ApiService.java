@@ -10,6 +10,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import vn.phatbee.cosmesticshopapp.model.Address;
 import vn.phatbee.cosmesticshopapp.model.Banner;
 import vn.phatbee.cosmesticshopapp.model.Cart;
 import vn.phatbee.cosmesticshopapp.model.CartItemRequest;
@@ -81,4 +82,7 @@ public interface ApiService {
 
     @PUT("/api/user/{userId}")
     Call<UserUpdateResponse> updateUser(@Path("userId") Long userId, @Body UserUpdateDTO userUpdateDTO);
+
+    @GET("api/addresses/user/{userId}")
+    Call<List<Address>> getAddressesByUserId(@Path("userId") Long userId);
 }

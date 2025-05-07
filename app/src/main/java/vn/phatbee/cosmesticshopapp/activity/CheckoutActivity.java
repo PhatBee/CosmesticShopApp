@@ -1,5 +1,6 @@
 package vn.phatbee.cosmesticshopapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ public class CheckoutActivity extends AppCompatActivity {
     private ImageView ivBack;
     private TextView tvTotal;
     private CheckoutAdapter checkoutAdapter;
+    private ImageView ivEditAddress;
     private List<CartItem> cartItems;
 
     @Override
@@ -36,6 +38,12 @@ public class CheckoutActivity extends AppCompatActivity {
 
         // Set up back button
         ivBack.setOnClickListener(v -> finish());
+
+        ivEditAddress = findViewById(R.id.ivEditAddress);
+        ivEditAddress.setOnClickListener(v -> {
+            Intent intent = new Intent(CheckoutActivity.this, AddressListActivity.class);
+            startActivity(intent);
+        });
 
         // Get cart items from intent
         cartItems = (ArrayList<CartItem>) getIntent().getSerializableExtra("selectedCartItems");

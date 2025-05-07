@@ -19,6 +19,8 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView tvMyAccount;
     private ImageView ivMyAccount;
     private ImageView btnLogout;
+    private ImageView ivAddress;
+    private TextView tvAddress;
     private UserSessionManager sessionManager;
 
 
@@ -41,6 +43,19 @@ public class ProfileActivity extends AppCompatActivity {
 
         ivMyAccount.setOnClickListener(v ->{
             Intent intent = new Intent(ProfileActivity.this, EditAccountActivity.class);
+            startActivity(intent);
+        });
+
+
+        ivAddress = findViewById(R.id.ivAddress);
+        ivAddress.setOnClickListener(v ->{
+            Intent intent = new Intent(ProfileActivity.this, AddressListActivity.class);
+            startActivity(intent);
+        });
+
+        tvAddress = findViewById(R.id.tvAddress);
+        tvAddress.setOnClickListener(v ->{
+            Intent intent = new Intent(ProfileActivity.this, AddressListActivity.class);
             startActivity(intent);
         });
 

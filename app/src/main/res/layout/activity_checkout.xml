@@ -73,12 +73,12 @@
                         android:text="26, Duong So 2, Thao Dien Ward, An Phu, District 2, Ho Chi Minh city"
                         android:textColor="#757575"
                         android:textSize="14sp"
-                        app:layout_constraintEnd_toStartOf="@id/ivEdit"
+                        app:layout_constraintEnd_toStartOf="@id/ivEditAddress"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
-                        android:id="@+id/ivEdit"
+                        android:id="@+id/ivEditAddress"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginStart="16dp"

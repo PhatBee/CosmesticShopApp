@@ -125,9 +125,9 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.CartI
             // startActivity(intent);
 
             //Pass the selected items to CheckoutActivity
-            Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
-            intent.putExtra("selectedCartItems", new ArrayList<>(selectedItems));
-            startActivity(intent);
+//            Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
+//            intent.putExtra("selectedCartItems", new ArrayList<>(selectedItems));
+//            startActivity(intent);
         });
 
         // Handle Start Shopping button (when cart is empty)
