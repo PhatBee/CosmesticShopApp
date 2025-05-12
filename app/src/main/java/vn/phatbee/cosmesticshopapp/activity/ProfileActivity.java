@@ -17,7 +17,7 @@ import vn.phatbee.cosmesticshopapp.manager.UserSessionManager;
 
 public class ProfileActivity extends AppCompatActivity {
     private TextView tvMyAccount;
-    private ImageView ivMyAccount;
+    private ImageView ivMyAccount, editAccount;
     private ImageView btnLogout;
     private ImageView ivAddress;
     private TextView tvAddress;
@@ -56,6 +56,12 @@ public class ProfileActivity extends AppCompatActivity {
         tvAddress = findViewById(R.id.tvAddress);
         tvAddress.setOnClickListener(v ->{
             Intent intent = new Intent(ProfileActivity.this, AddressListActivity.class);
+            startActivity(intent);
+        });
+
+        editAccount = findViewById(R.id.ivEdit);
+        editAccount.setOnClickListener(v ->{
+            Intent intent = new Intent(ProfileActivity.this, EditAccountActivity.class);
             startActivity(intent);
         });
 

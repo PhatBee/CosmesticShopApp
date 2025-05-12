@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.O
     private CategoryAdapter categoryAdapter;
     private ImageView ivGioHang;
     private ImageView ivProfile;
+    private ImageView ivSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.O
         tvUsername = findViewById(R.id.tvUsername);
         ivGioHang = findViewById(R.id.ivGioHang);
         ivProfile = findViewById(R.id.ivProfile);
+        ivSearch = findViewById(R.id.ivSearch);
 
         rvCategories = findViewById(R.id.rvDanhMuc);
         progressBarCategory = findViewById(R.id.progressBar3);
@@ -103,6 +105,11 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.O
 
         ivProfile.setOnClickListener( v -> {
             Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+            startActivity(intent);
+        });
+
+        ivSearch.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SearchActivity.class);
             startActivity(intent);
         });
 

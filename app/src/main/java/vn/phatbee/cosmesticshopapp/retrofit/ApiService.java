@@ -56,12 +56,16 @@ public interface ApiService {
 
     @GET("api/categories")
     Call<List<Category>> getCategories();
+    @GET("api/products")
+    Call<List<Product>> getProducts();
 
     @GET("api/products/category/{categoryId}")
     Call<List<Product>> getProductsByCategory(@Path("categoryId") int categoryId);
 
     @GET("api/products/{productId}")
     Call<Product> getProductDetails(@Path("productId") Long productId);
+    @GET("api/products/search")
+    Call<List<Product>> searchProducts(@Query("keyword") String keyword);
 
     @GET("api/cart/user/{userId}")
     Call<Cart> getCart(@Path("userId") Long userId);
