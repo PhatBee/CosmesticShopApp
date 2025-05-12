@@ -89,4 +89,10 @@ public interface ApiService {
 
     @POST("api/addresses/add")
     Call<Address> addAddress(@Query("userId") Long userId, @Body Address address);
+
+    @PUT("api/addresses/update")
+    Call<Address> updateAddress(@Query("userId") Long userId, @Body Address address);
+
+    @DELETE("api/addresses/delete/{addressId}")
+    Call<Void> deleteAddress(@Path("addressId") Long addressId);
 }

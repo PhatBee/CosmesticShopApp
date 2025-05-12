@@ -1,6 +1,8 @@
 package vn.phatbee.cosmesticshopapp.model;
 
-public class Address {
+import java.io.Serializable;
+
+public class Address implements Serializable {
     private Long addressId;
     private String receiverName;
     private String receiverPhone;
@@ -8,6 +10,7 @@ public class Address {
     private String province;
     private String district;
     private String ward;
+    private boolean isDefault;
 
     public Long getAddressId() {
         return addressId;
@@ -63,5 +66,12 @@ public class Address {
 
     public void setWard(String ward) {
         this.ward = ward;
+    }
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean isDefault) {
+        this.isDefault = isDefault;
     }
 }

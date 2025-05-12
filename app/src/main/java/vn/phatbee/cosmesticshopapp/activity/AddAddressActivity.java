@@ -7,11 +7,7 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -82,6 +78,7 @@ public class AddAddressActivity extends AppCompatActivity {
         address.setProvince(etProvince.getText().toString().trim());
         address.setDistrict(etDistrict.getText().toString().trim());
         address.setWard(etWard.getText().toString().trim());
+        address.setDefault(swDefault.isChecked());
 
         Call<Address> call = apiService.addAddress(userId, address);
         call.enqueue(new Callback<Address>() {
@@ -89,6 +86,7 @@ public class AddAddressActivity extends AppCompatActivity {
             public void onResponse(Call<Address> call, Response<Address> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(AddAddressActivity.this, "Address added successfully", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
                     finish();
                 } else {
                     Toast.makeText(AddAddressActivity.this, "Failed to add address", Toast.LENGTH_SHORT).show();

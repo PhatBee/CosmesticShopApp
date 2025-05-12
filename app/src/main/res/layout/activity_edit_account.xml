@@ -84,14 +84,15 @@
             android:layout_height="wrap_content"
             android:hint="What's your full name?"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:boxStrokeColor="#9E9E9E"
+            app:boxStrokeColor="@color/xanh3"
+            android:textColorHint="@color/xanh3"
+            app:hintTextColor="@color/xanh3"
             android:layout_marginBottom="16dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etFullName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_white"
                 android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -102,14 +103,15 @@
             android:layout_height="wrap_content"
             android:hint="Phone Number"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:boxStrokeColor="#9E9E9E"
+            app:boxStrokeColor="@color/xanh3"
+            android:textColorHint="@color/xanh3"
+            app:hintTextColor="@color/xanh3"
             android:layout_marginBottom="16dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_white"
                 android:inputType="phone"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -120,14 +122,15 @@
             android:layout_height="wrap_content"
             android:hint="Select your gender"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            app:boxStrokeColor="#9E9E9E"
+            app:boxStrokeColor="@color/xanh3"
+            android:textColorHint="@color/xanh3"
+            app:hintTextColor="@color/xanh3"
             android:layout_marginBottom="16dp">
 
             <AutoCompleteTextView
                 android:id="@+id/gender_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_white"
                 android:inputType="none"
                 tools:ignore="SpeakableTextPresentCheck" />
         </com.google.android.material.textfield.TextInputLayout>
