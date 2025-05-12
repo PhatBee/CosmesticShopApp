@@ -37,11 +37,15 @@ public class AddressListActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> editAddressLauncher;
     private ActivityResultLauncher<Intent> addAddressLauncher;
     private boolean isDataLoaded = false;
+    private boolean isSelectMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address_list);
+
+        // Kiểm tra chế độ chọn địa chỉ từ Intent
+        isSelectMode = getIntent().getBooleanExtra("selectMode", false);
 
         // Khởi tạo các view
         rvAddresses = findViewById(R.id.rvAddresses);
@@ -71,6 +75,16 @@ public class AddressListActivity extends AppCompatActivity {
         // Thiết lập RecyclerView
         rvAddresses.setLayoutManager(new LinearLayoutManager(this));
         addressAdapter = new AddressAdapter(this, new ArrayList<>(), editAddressLauncher);
+
+        if (isSelectMode) {
+            addressAdapter.setOnAddressSelectedListener(address -> {
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("selectedAddress", address);
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            });
+        }
+
         rvAddresses.setAdapter(addressAdapter);
 
         // Xử lý sự kiện nút Back

@@ -2,6 +2,7 @@ package vn.phatbee.cosmesticshopapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -12,12 +13,17 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,6 +33,11 @@ import vn.phatbee.cosmesticshopapp.adapter.CartItemCheckoutAdapter;
 import vn.phatbee.cosmesticshopapp.manager.UserSessionManager;
 import vn.phatbee.cosmesticshopapp.model.Address;
 import vn.phatbee.cosmesticshopapp.model.CartItem;
+import vn.phatbee.cosmesticshopapp.model.OrderLineRequest;
+import vn.phatbee.cosmesticshopapp.model.OrderRequest;
+import vn.phatbee.cosmesticshopapp.model.PaymentRequest;
+import vn.phatbee.cosmesticshopapp.model.Product;
+import vn.phatbee.cosmesticshopapp.model.ShippingAddressRequest;
 import vn.phatbee.cosmesticshopapp.model.User;
 import vn.phatbee.cosmesticshopapp.retrofit.ApiService;
 import vn.phatbee.cosmesticshopapp.retrofit.RetrofitClient;
@@ -44,6 +55,7 @@ public class CheckoutActivity extends AppCompatActivity {
     private CartItemCheckoutAdapter cartItemAdapter;
     private ActivityResultLauncher<Intent> addressListLauncher;
     private Address defaultAddress;
+    private Address selectedAddress;
     private List<CartItem> selectedCartItems;
 
     @Override
@@ -97,15 +109,34 @@ public class CheckoutActivity extends AppCompatActivity {
         addressListLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode() == RESULT_OK) {
-                        loadDefaultAddress();
+//                    if (result.getResultCode() == RESULT_OK) {
+//                        loadDefaultAddress();
+//                    }
+
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        selectedAddress = (Address) result.getData().getSerializableExtra("selectedAddress");
+                        if (selectedAddress != null) {
+                            String addressText = String.format("%s, %s, %s, %s",
+                                    selectedAddress.getAddress(),
+                                    selectedAddress.getWard() != null ? selectedAddress.getWard() : "",
+                                    selectedAddress.getDistrict() != null ? selectedAddress.getDistrict() : "",
+                                    selectedAddress.getProvince() != null ? selectedAddress.getProvince() : "");
+                            tvAddress.setText(addressText);
+
+                            // Cập nhật tvPhone với receiverPhone từ selectedAddress
+                            tvPhone.setText(selectedAddress.getReceiverPhone() != null ? selectedAddress.getReceiverPhone() : "Chưa có số điện thoại");
+                        }
                     }
                 });
 
         // Setup click listeners
         ivBack.setOnClickListener(v -> finish());
+
         ivEditAddressCheckout.setOnClickListener(v -> {
             Intent intent = new Intent(CheckoutActivity.this, AddressListActivity.class);
+
+            intent.putExtra("selectMode", true);
+
             addressListLauncher.launch(intent);
         });
         ivEditContact.setOnClickListener(v -> {
@@ -133,15 +164,26 @@ public class CheckoutActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Address> call, Response<Address> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    defaultAddress = response.body();
+                    selectedAddress = response.body();
                     String addressText = String.format("%s, %s, %s, %s",
-                            defaultAddress.getAddress(),
-                            defaultAddress.getWard(),
-                            defaultAddress.getDistrict(),
-                            defaultAddress.getProvince());
+                            selectedAddress.getAddress(),
+                            selectedAddress.getWard(),
+                            selectedAddress.getDistrict(),
+                            selectedAddress.getProvince());
                     tvAddress.setText(addressText);
+
+                    // Cập nhật tvPhone với receiverPhone từ selectedAddress
+                    tvPhone.setText(selectedAddress.getReceiverPhone() != null ? selectedAddress.getReceiverPhone() : "Chưa có số điện thoại");
+                    // Sau khi tải địa chỉ, tải email từ user
+                    loadContactInfo();
+
                 } else {
-                    tvAddress.setText("No default address set");
+                    tvAddress.setText("Chưa có địa chỉ mặc định");
+                    tvPhone.setText("Chưa có số điện thoại");
+                    Toast.makeText(CheckoutActivity.this, "Vui lòng chọn địa chỉ giao hàng", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(CheckoutActivity.this, AddressListActivity.class);
+                    intent.putExtra("selectMode", true);
+                    addressListLauncher.launch(intent);
                 }
             }
 
@@ -162,18 +204,20 @@ public class CheckoutActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     User user = response.body();
-                    tvPhone.setText(user.getPhone());
-                    tvEmail.setText(user.getEmail());
+                    tvEmail.setText(user.getEmail() != null ? user.getEmail() : "Chưa có email");
                 } else {
-                    Toast.makeText(CheckoutActivity.this, "Failed to load contact info", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CheckoutActivity.this, "Lỗi khi tải email người dùng", Toast.LENGTH_SHORT).show();
+                    tvEmail.setText("Lỗi tải email");
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(CheckoutActivity.this, "Error loading contact info: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(CheckoutActivity.this, "Lỗi khi tải email: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                tvEmail.setText("Lỗi tải email");
             }
         });
+
     }
 
     private void updateTotalPrice() {
@@ -185,8 +229,11 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void proceedToPay() {
-        if (defaultAddress == null) {
-            Toast.makeText(this, "Please set a default address", Toast.LENGTH_SHORT).show();
+        if (selectedAddress == null) {
+            Toast.makeText(this, "Please set a address", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(CheckoutActivity.this, AddressListActivity.class);
+            intent.putExtra("selectMode", true);
+            addressListLauncher.launch(intent);
             return;
         }
 
@@ -207,17 +254,154 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     private void placeOrder(String paymentMethod) {
-        Toast.makeText(this, "Order placed successfully with " + paymentMethod, Toast.LENGTH_SHORT).show();
-        apiService.clearCart(sessionManager.getUserDetails().getUserId()).enqueue(new Callback<Void>() {
+        Long userId = sessionManager.getUserDetails().getUserId();
+        if (userId == null || userId == 0) {
+            Toast.makeText(this, "Please log in to proceed", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Step 1: Prepare order data
+        double total = 0;
+        for (CartItem item : selectedCartItems) {
+            total += item.getProduct().getPrice() * item.getQuantity();
+        }
+        OrderRequest orderRequest = new OrderRequest(
+                userId,
+                total,
+                "PENDING", // Initial order status
+                null, // Delivery date can be set later
+                paymentMethod
+        );
+
+        // Step 2: Prepare order lines with product snapshots
+        List<OrderLineRequest> orderLineRequests = new ArrayList<>();
+        for (CartItem item : selectedCartItems) {
+            OrderLineRequest orderLineRequest = getOrderLineRequest(item);
+            orderLineRequests.add(orderLineRequest);
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = LocalDateTime.now().format(formatter);
+
+        // Step 3: Prepare payment data
+        PaymentRequest paymentRequest = new PaymentRequest(
+                paymentMethod,
+                "PENDING", // Initial payment status
+                total,
+                formattedDate
+        );
+
+        // Step 4: Prepare shipping address data
+        ShippingAddressRequest shippingAddressRequest = new ShippingAddressRequest(
+                selectedAddress.getReceiverName(),
+                selectedAddress.getReceiverPhone(),
+                selectedAddress.getAddress(),
+                selectedAddress.getProvince(),
+                selectedAddress.getDistrict(),
+                selectedAddress.getWard()
+        );
+
+        // Step 5: Execute API calls sequentially
+        apiService.createOrder(orderRequest).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                finish();
+                if (response.isSuccessful()) {
+                    Log.d("CheckoutActivity", "Order created successfully");
+                    apiService.createOrderLines(orderLineRequests).enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful()) {
+                                Log.d("CheckoutActivity", "Order lines created successfully");
+                                apiService.createPayment(paymentRequest).enqueue(new Callback<Void>() {
+                                    @Override
+                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                        if (response.isSuccessful()) {
+                                            Log.d("CheckoutActivity", "Payment created successfully");
+                                            apiService.createShippingAddress(shippingAddressRequest).enqueue(new Callback<Void>() {
+                                                @Override
+                                                public void onResponse(Call<Void> call, Response<Void> response) {
+                                                    if (response.isSuccessful()) {
+                                                        Log.d("CheckoutActivity", "Shipping address created successfully");
+                                                        Toast.makeText(CheckoutActivity.this, "Order placed successfully with " + paymentMethod, Toast.LENGTH_SHORT).show();
+                                                        apiService.clearCart(userId).enqueue(new Callback<Void>() {
+                                                            @Override
+                                                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                                                if (response.isSuccessful()) {
+                                                                    finish();
+                                                                } else {
+                                                                    Toast.makeText(CheckoutActivity.this, "Error clearing cart: " + response.message(), Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onFailure(Call<Void> call, Throwable t) {
+                                                                Toast.makeText(CheckoutActivity.this, "Error clearing cart: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
+                                                    } else {
+                                                        Toast.makeText(CheckoutActivity.this, "Failed to save shipping address: " + response.message(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<Void> call, Throwable t) {
+                                                    Toast.makeText(CheckoutActivity.this, "Error saving shipping address: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        } else {
+                                            Toast.makeText(CheckoutActivity.this, "Failed to save payment: " + response.message(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Void> call, Throwable t) {
+                                        Toast.makeText(CheckoutActivity.this, "Error saving payment: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            } else {
+                                Toast.makeText(CheckoutActivity.this, "Failed to save order lines: " + response.message(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Toast.makeText(CheckoutActivity.this, "Error saving order lines: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    Toast.makeText(CheckoutActivity.this, "Failed to create order: " + response.message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(CheckoutActivity.this, "Error clearing cart: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(CheckoutActivity.this, "Error creating order: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @NonNull
+    private static OrderLineRequest getOrderLineRequest(CartItem item) {
+        Product product = item.getProduct();
+        Map<String, Object> snapshot = new HashMap<>();
+        snapshot.put("productName", product.getProductName());
+        snapshot.put("productCode", product.getProductCode());
+        snapshot.put("price", product.getPrice());
+        snapshot.put("image", product.getImage());
+        snapshot.put("brand", product.getBrand());
+        snapshot.put("origin", product.getOrigin());
+        snapshot.put("ingredient", product.getIngredient());
+        snapshot.put("how_to_use", product.getHow_to_use());
+        snapshot.put("description", product.getDescription());
+        snapshot.put("volume", product.getVolume());
+        snapshot.put("manufactureDate", product.getManufactureDate());
+        snapshot.put("expirationDate", product.getExpirationDate());
+        snapshot.put("createdDate", product.getCreatedDate());
+        OrderLineRequest orderLineRequest = new OrderLineRequest(
+                item.getProduct().getProductId(),
+                item.getQuantity(),
+                snapshot
+        );
+        return orderLineRequest;
     }
 }

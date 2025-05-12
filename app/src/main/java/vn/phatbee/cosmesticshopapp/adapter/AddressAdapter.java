@@ -32,6 +32,12 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressV
     private ApiService apiService;
     private UserSessionManager sessionManager;
     private ActivityResultLauncher<Intent> editAddressLauncher;
+    private OnAddressSelectedListener selectListener;
+    private int selectedPosition = -1;
+
+    public interface OnAddressSelectedListener {
+        void onAddressSelected(Address address);
+    }
 
     public AddressAdapter(Context context, List<Address> addresses, ActivityResultLauncher<Intent> editAddressLauncher) {
         this.context = context;
@@ -39,6 +45,10 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressV
         this.apiService = RetrofitClient.getClient().create(ApiService.class);
         this.sessionManager = new UserSessionManager(context);
         this.editAddressLauncher = editAddressLauncher;
+    }
+
+    public void setOnAddressSelectedListener(OnAddressSelectedListener listener) {
+        this.selectListener = listener;
     }
 
     @NonNull
@@ -60,6 +70,18 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressV
                 address.getDistrict() != null ? address.getDistrict() : "",
                 address.getProvince() != null ? address.getProvince() : ""));
         holder.tvDefault.setVisibility(address.isDefault() ? View.VISIBLE : View.GONE);
+
+        // Làm nổi bật item được chọn
+        holder.itemView.setBackgroundResource(selectedPosition == position ? R.drawable.selected_background : 0);
+
+        // Xử lý click trên toàn bộ item để chọn địa chỉ
+        holder.itemView.setOnClickListener(v -> {
+            if (selectListener != null) {
+                selectedPosition = holder.getAdapterPosition();
+                notifyDataSetChanged();
+                selectListener.onAddressSelected(address);
+            }
+        });
 
         holder.ivEditAddress.setOnClickListener(v -> {
             Intent intent = new Intent(context, EditAddressActivity.class);
@@ -112,6 +134,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressV
     public void updateAddresses(List<Address> newAddresses) {
         this.addresses.clear();
         this.addresses.addAll(newAddresses);
+        selectedPosition = -1; // Reset selected position when updating list
         notifyDataSetChanged();
     }
 

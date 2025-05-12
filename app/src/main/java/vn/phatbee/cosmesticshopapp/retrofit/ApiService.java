@@ -19,12 +19,16 @@ import vn.phatbee.cosmesticshopapp.model.Category;
 import vn.phatbee.cosmesticshopapp.model.ForgotPasswordRequest;
 import vn.phatbee.cosmesticshopapp.model.LoginRequest;
 import vn.phatbee.cosmesticshopapp.model.LoginResponse;
+import vn.phatbee.cosmesticshopapp.model.OrderLineRequest;
+import vn.phatbee.cosmesticshopapp.model.OrderRequest;
 import vn.phatbee.cosmesticshopapp.model.OtpVerificationRequest;
 import vn.phatbee.cosmesticshopapp.model.PasswordResetResponse;
+import vn.phatbee.cosmesticshopapp.model.PaymentRequest;
 import vn.phatbee.cosmesticshopapp.model.Product;
 import vn.phatbee.cosmesticshopapp.model.RegistrationRequest;
 import vn.phatbee.cosmesticshopapp.model.RegistrationResponse;
 import vn.phatbee.cosmesticshopapp.model.ResetPasswordRequest;
+import vn.phatbee.cosmesticshopapp.model.ShippingAddressRequest;
 import vn.phatbee.cosmesticshopapp.model.User;
 import vn.phatbee.cosmesticshopapp.model.UserUpdateDTO;
 import vn.phatbee.cosmesticshopapp.model.UserUpdateResponse;
@@ -102,4 +106,16 @@ public interface ApiService {
 
     @DELETE("api/addresses/delete/{addressId}")
     Call<Void> deleteAddress(@Path("addressId") Long addressId);
+
+    @POST("api/orders/create")
+    Call<Void> createOrder(@Body OrderRequest orderRequest);
+
+    @POST("api/order-lines/create")
+    Call<Void> createOrderLines(@Body List<OrderLineRequest> orderLineRequests);
+
+    @POST("api/payments/create")
+    Call<Void> createPayment(@Body PaymentRequest paymentRequest);
+
+    @POST("api/shipping-addresses/create")
+    Call<Void> createShippingAddress(@Body ShippingAddressRequest shippingAddressRequest);
 }
