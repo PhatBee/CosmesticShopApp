@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import retrofit2.Call;
@@ -76,10 +77,8 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.CartI
         // Setup listeners
         setupListeners();
 
-        // Load cart dataget
+        // Load cart data
         loadCartData();
-
-
     }
 
     private void initializeViews() {
@@ -119,15 +118,9 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.CartI
                 Toast.makeText(CartActivity.this, "Please select at least one item", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Toast.makeText(CartActivity.this, "Proceeding to checkout with " + selectedItems.size() + " items", Toast.LENGTH_SHORT).show();
-            // Navigate to checkout activity (uncomment when implemented)
-            // Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
-            // startActivity(intent);
-
-            //Pass the selected items to CheckoutActivity
-//            Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
-//            intent.putExtra("selectedCartItems", new ArrayList<>(selectedItems));
-//            startActivity(intent);
+            Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
+            intent.putExtra("selectedCartItems", new ArrayList<>(selectedItems)); // Ensure ArrayList
+            startActivity(intent);
         });
 
         // Handle Start Shopping button (when cart is empty)

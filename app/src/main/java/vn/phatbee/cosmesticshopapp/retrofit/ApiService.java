@@ -91,6 +91,9 @@ public interface ApiService {
     @GET("api/addresses/user/{userId}")
     Call<List<Address>> getAddressesByUserId(@Path("userId") Long userId);
 
+    @GET("api/addresses/default/{userId}")
+    Call<Address> getDefaultAddress(@Path("userId") Long userId);
+
     @POST("api/addresses/add")
     Call<Address> addAddress(@Query("userId") Long userId, @Body Address address);
 

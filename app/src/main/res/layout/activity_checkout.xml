@@ -68,6 +68,7 @@
                     android:layout_marginTop="8dp">
 
                     <TextView
+                        android:id="@+id/tvAddress"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="26, Duong So 2, Thao Dien Ward, An Phu, District 2, Ho Chi Minh city"
@@ -243,24 +244,26 @@
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
+                <RadioGroup
+                    android:id="@+id/rgPaymentMethod"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Pay •••• 1234"
-                    android:textColor="#757575"
-                    android:textSize="14sp" />
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnGooglePay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_blue3"
-                    android:text="Proceed with Google Pay"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp" />
+                    <RadioButton
+                        android:id="@+id/rbCOD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="COD" />
+
+                    <RadioButton
+                        android:id="@+id/rbVNPay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="VNPay"
+                        android:layout_marginStart="16dp" />
+                </RadioGroup>
 
                 <LinearLayout
                     android:layout_width="match_parent"

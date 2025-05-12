@@ -1,6 +1,8 @@
 package vn.phatbee.cosmesticshopapp.model;
 
-public class Product {
+import java.io.Serializable;
+
+public class Product implements Serializable {
         private Long productId;
         private Category category;
         private String productName;

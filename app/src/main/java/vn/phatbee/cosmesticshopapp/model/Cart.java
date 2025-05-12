@@ -1,9 +1,11 @@
 package vn.phatbee.cosmesticshopapp.model;
 
 import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
 import java.util.Set;
 
-public class Cart {
+public class Cart implements Serializable {
     @SerializedName("cartId")
     private Long cartId;
 
