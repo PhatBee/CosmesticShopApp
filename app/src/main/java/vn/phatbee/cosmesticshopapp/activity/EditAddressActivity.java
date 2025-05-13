@@ -7,11 +7,7 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -59,7 +55,7 @@ public class EditAddressActivity extends AppCompatActivity {
             etProvince.setText(address.getProvince());
             etDistrict.setText(address.getDistrict());
             etWard.setText(address.getWard());
-            swDefault.setChecked(address.isDefault());
+            swDefault.setChecked(address.isDefaultAddress());
         } else {
             Toast.makeText(this, "Error: No address data provided", Toast.LENGTH_SHORT).show();
             finish();
@@ -91,7 +87,7 @@ public class EditAddressActivity extends AppCompatActivity {
         address.setProvince(etProvince.getText().toString().trim());
         address.setDistrict(etDistrict.getText().toString().trim());
         address.setWard(etWard.getText().toString().trim());
-        address.setDefault(swDefault.isChecked());
+        address.setDefaultAddress(swDefault.isChecked());
 
         // Gửi yêu cầu cập nhật tới backend
         Call<Address> call = apiService.updateAddress(userId, address);

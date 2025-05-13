@@ -10,7 +10,7 @@ public class Address implements Serializable {
     private String province;
     private String district;
     private String ward;
-    private boolean isDefault;
+    private boolean defaultAddress;
 
     public Long getAddressId() {
         return addressId;
@@ -67,11 +67,11 @@ public class Address implements Serializable {
     public void setWard(String ward) {
         this.ward = ward;
     }
-    public boolean isDefault() {
-        return isDefault;
+    public boolean isDefaultAddress() {
+        return defaultAddress;
     }
 
-    public void setDefault(boolean isDefault) {
-        this.isDefault = isDefault;
+    public void setDefaultAddress(boolean isDefault) {
+        this.defaultAddress = isDefault;
     }
 }

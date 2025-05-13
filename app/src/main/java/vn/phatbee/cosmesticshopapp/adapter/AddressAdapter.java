@@ -69,7 +69,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressV
                 address.getWard() != null ? address.getWard() : "",
                 address.getDistrict() != null ? address.getDistrict() : "",
                 address.getProvince() != null ? address.getProvince() : ""));
-        holder.tvDefault.setVisibility(address.isDefault() ? View.VISIBLE : View.GONE);
+        holder.tvDefault.setVisibility(address.isDefaultAddress() ? View.VISIBLE : View.GONE);
 
         // Làm nổi bật item được chọn
         holder.itemView.setBackgroundResource(selectedPosition == position ? R.drawable.selected_background : 0);

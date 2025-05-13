@@ -81,8 +81,8 @@
 
             <TextView
                 android:id="@+id/tvDefault"
-                android:layout_width="31dp"
-                android:layout_height="46dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="#4CAF50"
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="4dp"

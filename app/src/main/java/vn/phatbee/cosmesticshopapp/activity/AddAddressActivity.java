@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -78,24 +80,43 @@ public class AddAddressActivity extends AppCompatActivity {
         address.setProvince(etProvince.getText().toString().trim());
         address.setDistrict(etDistrict.getText().toString().trim());
         address.setWard(etWard.getText().toString().trim());
-        address.setDefault(swDefault.isChecked());
 
-        Call<Address> call = apiService.addAddress(userId, address);
-        call.enqueue(new Callback<Address>() {
+        // Kiểm tra xem có địa chỉ nào khác không
+        Call<List<Address>> checkCall = apiService.getAddressesByUserId(userId);
+        checkCall.enqueue(new Callback<List<Address>>() {
             @Override
-            public void onResponse(Call<Address> call, Response<Address> response) {
+            public void onResponse(Call<List<Address>> call, Response<List<Address>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Toast.makeText(AddAddressActivity.this, "Address added successfully", Toast.LENGTH_SHORT).show();
-                    setResult(RESULT_OK);
-                    finish();
+                    List<Address> addresses = response.body();
+                    // Nếu không có địa chỉ nào, tự động đặt là mặc định
+                    address.setDefaultAddress(addresses.isEmpty() ? true : swDefault.isChecked());
+
+                    // Gửi yêu cầu thêm địa chỉ
+                    Call<Address> addCall = apiService.addAddress(userId, address);
+                    addCall.enqueue(new Callback<Address>() {
+                        @Override
+                        public void onResponse(Call<Address> call, Response<Address> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                Toast.makeText(AddAddressActivity.this, "Address added successfully", Toast.LENGTH_SHORT).show();
+                                setResult(RESULT_OK);
+                                finish();
+                            } else {
+                                Toast.makeText(AddAddressActivity.this, "Failed to add address", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Address> call, Throwable t) {
+                            Toast.makeText(AddAddressActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 } else {
-                    Toast.makeText(AddAddressActivity.this, "Failed to add address", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddAddressActivity.this, "Lỗi khi kiểm tra địa chỉ", Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
-            public void onFailure(Call<Address> call, Throwable t) {
-                Toast.makeText(AddAddressActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<List<Address>> call, Throwable t) {
+                Toast.makeText(AddAddressActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
