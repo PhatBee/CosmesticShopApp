@@ -33,6 +33,7 @@ import vn.phatbee.cosmesticshopapp.model.ShippingAddress;
 import vn.phatbee.cosmesticshopapp.model.User;
 import vn.phatbee.cosmesticshopapp.model.UserUpdateDTO;
 import vn.phatbee.cosmesticshopapp.model.UserUpdateResponse;
+import vn.phatbee.cosmesticshopapp.model.Wishlist;
 
 public interface ApiService {
     @GET("api/banners")
@@ -118,6 +119,19 @@ public interface ApiService {
     Call<Void> createPayment(@Body Payment paymentRequest);
 
     @POST("api/shipping-addresses/create")
+    Call<Void> createShippingAddress(@Body ShippingAddressRequest shippingAddressRequest);
+
+    @POST("/api/wishlist/add")
+    Call<Wishlist> addToWishlist(@Query("userId") Long userId, @Query("productId") Long productId);
+
+    @DELETE("/api/wishlist/remove")
+    Call<Void> removeFromWishlist(@Query("userId") Long userId, @Query("productId") Long productId);
+
+    @GET("/api/wishlist/user/{userId}")
+    Call<List<Wishlist>> getWishlistByUserId(@Path("userId") Long userId);
+
+    @GET("/api/wishlist/check")
+    Call<Boolean> isProductInWishlist(@Query("userId") Long userId, @Query("productId") Long productId);
     Call<Void> createShippingAddress(@Body ShippingAddress shippingAddressRequest);
 
     @GET("api/orders/user/{userId}")

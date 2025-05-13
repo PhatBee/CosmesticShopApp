@@ -112,6 +112,7 @@ public class AddAddressActivity extends AppCompatActivity {
                         }
                     });
                 } else {
+                    Log.d("AddAddressActivity", "Lỗi khi kiểm tra địa chỉ: " + response.code()+response.message());
                     Log.d("FailAddAddress", "Message: " + response.message());
                     Toast.makeText(AddAddressActivity.this, "Lỗi khi kiểm tra địa chỉ", Toast.LENGTH_SHORT).show();
                 }

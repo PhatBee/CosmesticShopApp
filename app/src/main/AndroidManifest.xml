@@ -20,6 +20,12 @@
             android:name=".activity.OrderListActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.HomeFragment"
+            android:exported="false" />
+        <activity
+            android:name=".activity.WishlistActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.SearchActivity"
             android:exported="false" />
         <activity
