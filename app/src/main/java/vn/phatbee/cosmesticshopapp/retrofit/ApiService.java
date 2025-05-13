@@ -119,9 +119,6 @@ public interface ApiService {
     @POST("api/payments/create")
     Call<Void> createPayment(@Body Payment paymentRequest);
 
-    @POST("api/shipping-addresses/create")
-    Call<Void> createShippingAddress(@Body ShippingAddressRequest shippingAddressRequest);
-
     @POST("/api/wishlist/add")
     Call<Wishlist> addToWishlist(@Query("userId") Long userId, @Query("productId") Long productId);
 
@@ -133,6 +130,8 @@ public interface ApiService {
 
     @GET("/api/wishlist/check")
     Call<Boolean> isProductInWishlist(@Query("userId") Long userId, @Query("productId") Long productId);
+
+    @POST("api/shipping-addresses/create")
     Call<Void> createShippingAddress(@Body ShippingAddress shippingAddressRequest);
 
     @GET("api/orders/user/{userId}")
@@ -140,4 +139,7 @@ public interface ApiService {
 
     @POST("api/orders/create-vnpay-url")
     Call<ResponseBody> createVNPayPaymentUrl(@Query("userId") Long userId, @Body Map<String, String> paymentData);
+
+    @POST("api/orders/cancel/{orderId}")
+    Call<Void> cancelOrder(@Path("orderId") int orderId);
 }

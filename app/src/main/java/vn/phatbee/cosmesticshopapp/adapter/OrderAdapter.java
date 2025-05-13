@@ -1,9 +1,11 @@
 package vn.phatbee.cosmesticshopapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import vn.phatbee.cosmesticshopapp.R;
+import vn.phatbee.cosmesticshopapp.activity.OrderDetailActivity;
 import vn.phatbee.cosmesticshopapp.model.Order;
 import vn.phatbee.cosmesticshopapp.model.OrderLine;
 
@@ -141,13 +144,18 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         }
         holder.tvStatus.setText(statusText);
         holder.tvStatus.setTextColor(statusColor);
+
+        // Xử lý sự kiện nhấn nút "Xem chi tiết"
+        holder.btnViewDetails.setOnClickListener(v -> {
+            Intent intent = new Intent(context, OrderDetailActivity.class);
+            intent.putExtra("order", order);
+            context.startActivity(intent);
+        });
     }
 
     private void toggleExpand(OrderViewHolder holder, List<OrderLine> orderLines) {
         if (holder.expandableProductContainer.getVisibility() == View.GONE) {
-            // Remove existing views to avoid duplication
             holder.expandableProductContainer.removeAllViews();
-            // Add all products except the first two
             for (int i = 2; i < orderLines.size(); i++) {
                 OrderLine orderLine = orderLines.get(i);
                 Map<String, Object> productSnapshot = orderLine.getProductSnapshot();
@@ -169,10 +177,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 }
             }
             holder.expandableProductContainer.setVisibility(View.VISIBLE);
-            holder.ivExpand.setImageResource(R.drawable.ic_expand_less); // Change to collapse icon
+            holder.ivExpand.setImageResource(R.drawable.ic_expand_less);
         } else {
             holder.expandableProductContainer.setVisibility(View.GONE);
-            holder.ivExpand.setImageResource(R.drawable.ic_expand_more); // Change back to expand icon
+            holder.ivExpand.setImageResource(R.drawable.ic_expand_more);
         }
     }
 
@@ -192,6 +200,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         LinearLayout firstProductLayout, secondProductLayout, expandableProductContainer;
         ImageView ivProductImage1, ivProductImage2, ivExpand;
         TextView tvProductName1, tvQuantity1, tvProductName2, tvQuantity2;
+        Button btnViewDetails; // Thêm nút Xem chi tiết
 
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -212,6 +221,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
             expandableProductContainer = itemView.findViewById(R.id.expandableProductContainer);
             ivExpand = itemView.findViewById(R.id.ivExpand);
+
+            btnViewDetails = itemView.findViewById(R.id.btnViewDetails); // Khởi tạo nút
         }
     }
 }
