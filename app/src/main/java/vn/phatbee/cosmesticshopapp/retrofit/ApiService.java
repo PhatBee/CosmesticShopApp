@@ -3,6 +3,7 @@ package vn.phatbee.cosmesticshopapp.retrofit;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -122,4 +123,7 @@ public interface ApiService {
 
     @GET("api/orders/user/{userId}")
     Call<Map<String, List<Order>>> getOrdersByUserId(@Path("userId") Long userId);
+
+    @POST("api/orders/create-vnpay-url")
+    Call<ResponseBody> createVNPayPaymentUrl(@Query("userId") Long userId, @Body Map<String, String> paymentData);
 }

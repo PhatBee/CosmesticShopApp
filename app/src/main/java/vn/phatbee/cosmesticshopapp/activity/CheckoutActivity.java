@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,6 +44,9 @@ import vn.phatbee.cosmesticshopapp.model.User;
 import vn.phatbee.cosmesticshopapp.retrofit.ApiService;
 import vn.phatbee.cosmesticshopapp.retrofit.RetrofitClient;
 
+import com.vnpay.authentication.VNP_AuthenticationActivity;
+import com.vnpay.authentication.VNP_SdkCompletedCallback;
+
 public class CheckoutActivity extends AppCompatActivity {
 
     private ImageView ivBack, ivEditAddressCheckout, ivEditContact;
@@ -57,6 +62,10 @@ public class CheckoutActivity extends AppCompatActivity {
     private Address defaultAddress;
     private Address selectedAddress;
     private List<CartItem> selectedCartItems;
+
+    private String tmnCode = "KB5K1R3O"; // Thay bằng mã TMN mà VNPay cung cấp
+    private String scheme = "cosmesticshopapp"; // Thay bằng scheme bạn đã cấu hình
+    private ActivityResultLauncher<Intent> vnpayLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +134,21 @@ public class CheckoutActivity extends AppCompatActivity {
 
                             // Cập nhật tvPhone với receiverPhone từ selectedAddress
                             tvPhone.setText(selectedAddress.getReceiverPhone() != null ? selectedAddress.getReceiverPhone() : "Chưa có số điện thoại");
+                        }
+                    }
+                });
+
+        // Register ActivityResultLauncher for VNPay
+        vnpayLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        String action = result.getData().getStringExtra("action");
+                        Log.d("VNPayResult", "Action: " + action);
+                        if ("SuccessBackAction".equals(action)) {
+                            placeOrder("VNPay"); // Xử lý đặt hàng sau khi thanh toán thành công
+                        } else if ("FaildBackAction".equals(action) || "WebBackAction".equals(action)) {
+                            Toast.makeText(this, "Payment failed or cancelled", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -249,8 +273,75 @@ public class CheckoutActivity extends AppCompatActivity {
             placeOrder(paymentMethod);
         } else {
             Toast.makeText(this, "Proceeding with VNPay payment", Toast.LENGTH_SHORT).show();
-            // Implement VNPay integration here
+            // Tạo URL thanh toán từ backend (giả sử bạn đã có API tạo URL từ VNPay)
+            createVNPayPaymentUrl();
         }
+    }
+
+    private void createVNPayPaymentUrl() {
+        Long userId = sessionManager.getUserDetails().getUserId();
+        if (userId == null || userId == 0) {
+            Toast.makeText(this, "Please log in to proceed", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        double total = 0;
+        for (CartItem item : selectedCartItems) {
+            total += item.getProduct().getPrice() * item.getQuantity();
+        }
+
+        // Giả sử bạn có API tạo URL thanh toán từ backend
+        Map<String, String> paymentData = new HashMap<>();
+        paymentData.put("amount", String.valueOf(total));
+        paymentData.put("orderInfo", "Thanh toan don hang tu CosmeticShopApp");
+        paymentData.put("orderType", "other");
+        paymentData.put("returnUrl", "http://192.168.0.101:8080/api/vnpay-redirect"); // Thay bằng URL thực tế
+
+        Call<ResponseBody> call = apiService.createVNPayPaymentUrl(userId, paymentData);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    String paymentUrl = null;
+                    try {
+                        paymentUrl = response.body().string(); // <- Đọc raw text
+                        openVNPaySDK(paymentUrl);
+                    } catch (IOException e) {
+                        Toast.makeText(CheckoutActivity.this, "Error reading payment URL", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+                } else {
+                    Log.d("Create", call.toString());
+                    Toast.makeText(CheckoutActivity.this, "Failed to create VNPay URL", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d("vnpay", t.getMessage());
+                Toast.makeText(CheckoutActivity.this, "Error creating VNPay URL: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void openVNPaySDK(String paymentUrl) {
+        Intent intent = new Intent(this, VNP_AuthenticationActivity.class);
+        intent.putExtra("url", paymentUrl); // URL thanh toán từ backend
+        intent.putExtra("tmn_code", tmnCode); // Mã TMN từ VNPay
+        intent.putExtra("scheme", scheme); // Scheme để mở lại app
+        intent.putExtra("is_sandbox", true); // Sử dụng môi trường test, đổi thành false cho live
+        VNP_AuthenticationActivity.setSdkCompletedCallback(new VNP_SdkCompletedCallback() {
+            @Override
+            public void sdkAction(String action) {
+                Log.wtf("CheckoutActivity", "action: " + action);
+                if ("SuccessBackAction".equals(action)) {
+                    placeOrder("VNPay"); // Xử lý đặt hàng sau khi thanh toán thành công
+                } else if ("FaildBackAction".equals(action) || "WebBackAction".equals(action)) {
+                    Toast.makeText(CheckoutActivity.this, "Payment failed or cancelled", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        vnpayLauncher.launch(intent);
     }
 
     private void placeOrder(String paymentMethod) {
