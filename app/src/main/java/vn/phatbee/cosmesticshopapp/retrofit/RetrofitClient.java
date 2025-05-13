@@ -1,5 +1,9 @@
 package vn.phatbee.cosmesticshopapp.retrofit;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -19,10 +23,15 @@ public class RetrofitClient {
                     .writeTimeout(30, TimeUnit.SECONDS)
                     .build();
 
+            // Đăng ký adapter cho LocalDateTime
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                    .create();
+
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .client(okHttpClient)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
         }
         return retrofit;

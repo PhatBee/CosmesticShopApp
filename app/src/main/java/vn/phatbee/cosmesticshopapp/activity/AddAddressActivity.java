@@ -1,6 +1,7 @@
 package vn.phatbee.cosmesticshopapp.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -111,6 +112,7 @@ public class AddAddressActivity extends AppCompatActivity {
                         }
                     });
                 } else {
+                    Log.d("FailAddAddress", "Message: " + response.message());
                     Toast.makeText(AddAddressActivity.this, "Lỗi khi kiểm tra địa chỉ", Toast.LENGTH_SHORT).show();
                 }
             }

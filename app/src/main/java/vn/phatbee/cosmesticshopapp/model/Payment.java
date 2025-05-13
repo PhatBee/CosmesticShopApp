@@ -1,17 +1,16 @@
 package vn.phatbee.cosmesticshopapp.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
-public class PaymentRequest implements Serializable {
+public class Payment implements Serializable {
     private String paymentMethod;
     private String paymentStatus;
     private Double total;
     private String paymentDate;
 
     // Constructors, getters, and setters
-    public PaymentRequest() {}
-    public PaymentRequest(String paymentMethod, String paymentStatus, Double total, String paymentDate) {
+    public Payment() {}
+    public Payment(String paymentMethod, String paymentStatus, Double total, String paymentDate) {
         this.paymentMethod = paymentMethod;
         this.paymentStatus = paymentStatus;
         this.total = total;

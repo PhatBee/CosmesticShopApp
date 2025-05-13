@@ -3,14 +3,14 @@ package vn.phatbee.cosmesticshopapp.model;
 import java.io.Serializable;
 import java.util.Map;
 
-public class OrderLineRequest implements Serializable {
+public class OrderLine implements Serializable {
     private Long productId;
     private Long quantity;
     private Map<String, Object> productSnapshot;
 
     // Constructors, getters, and setters
-    public OrderLineRequest() {}
-    public OrderLineRequest(Long productId, Long quantity, Map<String, Object> productSnapshot) {
+    public OrderLine() {}
+    public OrderLine(Long productId, Long quantity, Map<String, Object> productSnapshot) {
         this.productId = productId;
         this.quantity = quantity;
         this.productSnapshot = productSnapshot;

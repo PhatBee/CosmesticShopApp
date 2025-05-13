@@ -2,7 +2,7 @@ package vn.phatbee.cosmesticshopapp.model;
 
 import java.io.Serializable;
 
-public class ShippingAddressRequest implements Serializable {
+public class ShippingAddress implements Serializable {
     private String receiverName;
     private String receiverPhone;
     private String address;
@@ -11,8 +11,8 @@ public class ShippingAddressRequest implements Serializable {
     private String ward;
 
     // Constructors, getters, and setters
-    public ShippingAddressRequest() {}
-    public ShippingAddressRequest(String receiverName, String receiverPhone, String address, String province, String district, String ward) {
+    public ShippingAddress() {}
+    public ShippingAddress(String receiverName, String receiverPhone, String address, String province, String district, String ward) {
         this.receiverName = receiverName;
         this.receiverPhone = receiverPhone;
         this.address = address;

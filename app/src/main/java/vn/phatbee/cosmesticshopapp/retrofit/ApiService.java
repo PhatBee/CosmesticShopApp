@@ -1,12 +1,12 @@
 package vn.phatbee.cosmesticshopapp.retrofit;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
-import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -19,16 +19,17 @@ import vn.phatbee.cosmesticshopapp.model.Category;
 import vn.phatbee.cosmesticshopapp.model.ForgotPasswordRequest;
 import vn.phatbee.cosmesticshopapp.model.LoginRequest;
 import vn.phatbee.cosmesticshopapp.model.LoginResponse;
-import vn.phatbee.cosmesticshopapp.model.OrderLineRequest;
+import vn.phatbee.cosmesticshopapp.model.Order;
+import vn.phatbee.cosmesticshopapp.model.OrderLine;
 import vn.phatbee.cosmesticshopapp.model.OrderRequest;
 import vn.phatbee.cosmesticshopapp.model.OtpVerificationRequest;
 import vn.phatbee.cosmesticshopapp.model.PasswordResetResponse;
-import vn.phatbee.cosmesticshopapp.model.PaymentRequest;
+import vn.phatbee.cosmesticshopapp.model.Payment;
 import vn.phatbee.cosmesticshopapp.model.Product;
 import vn.phatbee.cosmesticshopapp.model.RegistrationRequest;
 import vn.phatbee.cosmesticshopapp.model.RegistrationResponse;
 import vn.phatbee.cosmesticshopapp.model.ResetPasswordRequest;
-import vn.phatbee.cosmesticshopapp.model.ShippingAddressRequest;
+import vn.phatbee.cosmesticshopapp.model.ShippingAddress;
 import vn.phatbee.cosmesticshopapp.model.User;
 import vn.phatbee.cosmesticshopapp.model.UserUpdateDTO;
 import vn.phatbee.cosmesticshopapp.model.UserUpdateResponse;
@@ -111,11 +112,14 @@ public interface ApiService {
     Call<Void> createOrder(@Body OrderRequest orderRequest);
 
     @POST("api/order-lines/create")
-    Call<Void> createOrderLines(@Body List<OrderLineRequest> orderLineRequests);
+    Call<Void> createOrderLines(@Body List<OrderLine> orderLineRequests);
 
     @POST("api/payments/create")
-    Call<Void> createPayment(@Body PaymentRequest paymentRequest);
+    Call<Void> createPayment(@Body Payment paymentRequest);
 
     @POST("api/shipping-addresses/create")
-    Call<Void> createShippingAddress(@Body ShippingAddressRequest shippingAddressRequest);
+    Call<Void> createShippingAddress(@Body ShippingAddress shippingAddressRequest);
+
+    @GET("api/orders/user/{userId}")
+    Call<Map<String, List<Order>>> getOrdersByUserId(@Path("userId") Long userId);
 }

@@ -33,11 +33,11 @@ import vn.phatbee.cosmesticshopapp.adapter.CartItemCheckoutAdapter;
 import vn.phatbee.cosmesticshopapp.manager.UserSessionManager;
 import vn.phatbee.cosmesticshopapp.model.Address;
 import vn.phatbee.cosmesticshopapp.model.CartItem;
-import vn.phatbee.cosmesticshopapp.model.OrderLineRequest;
+import vn.phatbee.cosmesticshopapp.model.OrderLine;
 import vn.phatbee.cosmesticshopapp.model.OrderRequest;
-import vn.phatbee.cosmesticshopapp.model.PaymentRequest;
+import vn.phatbee.cosmesticshopapp.model.Payment;
 import vn.phatbee.cosmesticshopapp.model.Product;
-import vn.phatbee.cosmesticshopapp.model.ShippingAddressRequest;
+import vn.phatbee.cosmesticshopapp.model.ShippingAddress;
 import vn.phatbee.cosmesticshopapp.model.User;
 import vn.phatbee.cosmesticshopapp.retrofit.ApiService;
 import vn.phatbee.cosmesticshopapp.retrofit.RetrofitClient;
@@ -274,9 +274,9 @@ public class CheckoutActivity extends AppCompatActivity {
         );
 
         // Step 2: Prepare order lines with product snapshots
-        List<OrderLineRequest> orderLineRequests = new ArrayList<>();
+        List<OrderLine> orderLineRequests = new ArrayList<>();
         for (CartItem item : selectedCartItems) {
-            OrderLineRequest orderLineRequest = getOrderLineRequest(item);
+            OrderLine orderLineRequest = getOrderLineRequest(item);
             orderLineRequests.add(orderLineRequest);
         }
 
@@ -284,7 +284,7 @@ public class CheckoutActivity extends AppCompatActivity {
         String formattedDate = LocalDateTime.now().format(formatter);
 
         // Step 3: Prepare payment data
-        PaymentRequest paymentRequest = new PaymentRequest(
+        Payment paymentRequest = new Payment(
                 paymentMethod,
                 "PENDING", // Initial payment status
                 total,
@@ -292,7 +292,7 @@ public class CheckoutActivity extends AppCompatActivity {
         );
 
         // Step 4: Prepare shipping address data
-        ShippingAddressRequest shippingAddressRequest = new ShippingAddressRequest(
+        ShippingAddress shippingAddressRequest = new ShippingAddress(
                 selectedAddress.getReceiverName(),
                 selectedAddress.getReceiverPhone(),
                 selectedAddress.getAddress(),
@@ -381,7 +381,7 @@ public class CheckoutActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private static OrderLineRequest getOrderLineRequest(CartItem item) {
+    private static OrderLine getOrderLineRequest(CartItem item) {
         Product product = item.getProduct();
         Map<String, Object> snapshot = new HashMap<>();
         snapshot.put("productName", product.getProductName());
@@ -397,7 +397,7 @@ public class CheckoutActivity extends AppCompatActivity {
         snapshot.put("manufactureDate", product.getManufactureDate());
         snapshot.put("expirationDate", product.getExpirationDate());
         snapshot.put("createdDate", product.getCreatedDate());
-        OrderLineRequest orderLineRequest = new OrderLineRequest(
+        OrderLine orderLineRequest = new OrderLine(
                 item.getProduct().getProductId(),
                 item.getQuantity(),
                 snapshot
