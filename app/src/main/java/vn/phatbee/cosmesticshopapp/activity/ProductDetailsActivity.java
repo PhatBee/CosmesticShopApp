@@ -25,6 +25,7 @@ import vn.phatbee.cosmesticshopapp.model.Cart;
 import vn.phatbee.cosmesticshopapp.model.CartItem;
 import vn.phatbee.cosmesticshopapp.model.CartItemRequest;
 import vn.phatbee.cosmesticshopapp.model.Product;
+import vn.phatbee.cosmesticshopapp.model.Wishlist;
 import vn.phatbee.cosmesticshopapp.retrofit.ApiService;
 import vn.phatbee.cosmesticshopapp.retrofit.RetrofitClient;
 
@@ -42,6 +43,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private Product currentProduct;
     private Long productId;
     private UserSessionManager sessionManager;
+    private boolean isInWishlist = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,13 +82,16 @@ public class ProductDetailsActivity extends AppCompatActivity {
             addToCart(1L, true); // Add to cart and navigate to CheckoutActivity
         });
 
-        // Wishlist listener (placeholder)
-        btnWish.setOnClickListener(view -> {
-            Toast.makeText(this, "Added to wishlist", Toast.LENGTH_SHORT).show();
-            // TODO: Implement wishlist functionality
+        btnWish = findViewById(R.id.ivWishlist);
+        btnWish.setOnClickListener(v -> {
+            Intent intent = new Intent(ProductDetailsActivity.this, WishlistActivity.class);
+            startActivity(intent);
         });
 
+        btnWish.setOnClickListener(view -> toggleWishlist());
+
         getProductDetails();
+        checkWishlistStatus();
     }
 
     void anhXa() {
@@ -215,5 +220,79 @@ public class ProductDetailsActivity extends AppCompatActivity {
         cartItem.setQuantity(quantity);
         cartItem.setCartItemId(System.currentTimeMillis()); // Temporary ID for local use
         return cartItem;
+    }
+    private void checkWishlistStatus() {
+        Long userId = sessionManager.getUserDetails().getUserId();
+        if (userId == null || userId == 0) {
+            btnWish.setImageResource(R.drawable.ic_heart);
+            return;
+        }
+
+        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+        Call<Boolean> call = apiService.isProductInWishlist(userId, productId);
+        call.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    isInWishlist = response.body();
+                    btnWish.setImageResource(isInWishlist ? R.drawable.ic_heart_filled : R.drawable.ic_heart);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                Log.e(TAG, "Error checking wishlist status: " + t.getMessage());
+            }
+        });
+    }
+    private void toggleWishlist() {
+        Long userId = sessionManager.getUserDetails().getUserId();
+        if (userId == null || userId == 0) {
+            Toast.makeText(this, "Please log in to manage wishlist", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+        if (isInWishlist) {
+            Call<Void> call = apiService.removeFromWishlist(userId, productId);
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                        isInWishlist = false;
+                        btnWish.setImageResource(R.drawable.ic_heart);
+                        Toast.makeText(ProductDetailsActivity.this, "Removed from wishlist", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ProductDetailsActivity.this, "Failed to remove from wishlist", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Log.e(TAG, "Error removing from wishlist: " + t.getMessage());
+                    Toast.makeText(ProductDetailsActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Call<Wishlist> call = apiService.addToWishlist(userId, productId);
+            call.enqueue(new Callback<Wishlist>() {
+                @Override
+                public void onResponse(Call<Wishlist> call, Response<Wishlist> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        isInWishlist = true;
+                        btnWish.setImageResource(R.drawable.ic_heart_filled);
+                        Toast.makeText(ProductDetailsActivity.this, "Added to wishlist", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ProductDetailsActivity.this, "Failed to add to wishlist", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Wishlist> call, Throwable t) {
+                    Log.e(TAG, "Error adding to wishlist: " + t.getMessage());
+                    Toast.makeText(ProductDetailsActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 }

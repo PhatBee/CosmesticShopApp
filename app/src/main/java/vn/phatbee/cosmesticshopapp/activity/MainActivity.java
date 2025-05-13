@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.O
     private RecyclerView rvCategories;
     private ProgressBar progressBarCategory;
     private CategoryAdapter categoryAdapter;
-    private ImageView ivGioHang;
+    private ImageView ivGioHang, ivWishList;
     private ImageView ivProfile;
     private ImageView ivSearch;
 
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.O
         ivGioHang = findViewById(R.id.ivGioHang);
         ivProfile = findViewById(R.id.ivProfile);
         ivSearch = findViewById(R.id.ivSearch);
+        ivWishList = findViewById(R.id.ivYeuThich);
         ivDonHang = findViewById(R.id.ivDonHang);
 
         rvCategories = findViewById(R.id.rvDanhMuc);
@@ -113,6 +114,11 @@ public class MainActivity extends AppCompatActivity implements CategoryAdapter.O
 
         ivSearch.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+            startActivity(intent);
+        });
+
+        ivWishList.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, WishlistActivity.class);
             startActivity(intent);
         });
 
