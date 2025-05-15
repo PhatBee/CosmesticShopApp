@@ -58,6 +58,8 @@ dependencies {
     implementation (libs.converter.gson)
     implementation (libs.okhttp)
     implementation(libs.logging.interceptor)
+    implementation (libs.cloudinary.android)
+
     // VNPAY SDK .aar
     implementation(files("libs/merchant-1.0.25.aar"))
 }

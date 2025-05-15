@@ -27,6 +27,7 @@ import vn.phatbee.cosmesticshopapp.model.OtpVerificationRequest;
 import vn.phatbee.cosmesticshopapp.model.PasswordResetResponse;
 import vn.phatbee.cosmesticshopapp.model.Payment;
 import vn.phatbee.cosmesticshopapp.model.Product;
+import vn.phatbee.cosmesticshopapp.model.ProductFeedback;
 import vn.phatbee.cosmesticshopapp.model.RegistrationRequest;
 import vn.phatbee.cosmesticshopapp.model.RegistrationResponse;
 import vn.phatbee.cosmesticshopapp.model.ResetPasswordRequest;
@@ -142,4 +143,13 @@ public interface ApiService {
 
     @POST("api/orders/cancel/{orderId}")
     Call<Void> cancelOrder(@Path("orderId") int orderId);
+
+    @POST("api/feedback")
+    Call<ProductFeedback> createFeedback(@Body ProductFeedback feedback);
+
+    @PUT("api/feedback/{feedbackId}")
+    Call<ProductFeedback> updateFeedback(@Path("feedbackId") Long feedbackId, @Body ProductFeedback feedback);
+
+    @GET("api/feedback/order/{orderId}")
+    Call<List<ProductFeedback>> getFeedbackByOrderId(@Path("orderId") int orderId);
 }

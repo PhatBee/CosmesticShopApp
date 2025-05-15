@@ -179,8 +179,9 @@ public class OrderDetailActivity extends AppCompatActivity {
 
     private void reviewProduct() {
         // Giả sử bạn có một ReviewActivity để đánh giá sản phẩm
-        Intent intent = new Intent(this, ReviewActivity.class);
+        Intent intent = new Intent(this, ReviewListActivity.class);
         intent.putExtra("orderLines", new ArrayList<>(order.getOrderLines()));
+        intent.putExtra("orderId", order.getOrderId());
         startActivity(intent);
     }
 }

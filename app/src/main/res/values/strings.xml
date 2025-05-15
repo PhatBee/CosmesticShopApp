@@ -24,4 +24,7 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="cloudinary_cloud_name">drsl2pmoi</string>
+    <string name="cloudinary_api_key">969923242229433</string>
+    <string name="cloudinary_api_secret">38GR-r6bu1vBBpKp1K1Uw7IodeE</string>
 </resources>
