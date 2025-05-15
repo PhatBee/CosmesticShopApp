@@ -1,9 +1,6 @@
 package vn.phatbee.cosmesticshopapp.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -52,7 +49,7 @@ public class ProductListActivity extends AppCompatActivity implements ProductAda
         // Initialize views
         recyclerViewProducts = findViewById(R.id.recyclerViewProducts);
         tvCategoryName = findViewById(R.id.tvCategoryName);
-        progressBar = findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBarBanner);
         searchView = findViewById(R.id.searchView);
 
         // Set category name

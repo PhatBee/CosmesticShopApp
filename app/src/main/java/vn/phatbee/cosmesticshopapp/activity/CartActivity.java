@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import retrofit2.Call;
@@ -88,7 +87,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.CartI
         btnConfirmCart = findViewById(R.id.btnConfirmCart);
         btnStartShopping = findViewById(R.id.btnStartShopping);
         layoutEmpty = findViewById(R.id.layoutEmpty);
-        progressBar = findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBarBanner);
     }
 
     private void setupToolbar() {

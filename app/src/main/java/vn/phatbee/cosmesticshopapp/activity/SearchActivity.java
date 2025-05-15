@@ -44,7 +44,7 @@ public class SearchActivity extends AppCompatActivity implements ProductAdapter.
         // Initialize views
         searchView = findViewById(R.id.searchView);
         recyclerViewSearchResults = findViewById(R.id.recyclerViewSearchResults);
-        progressBar = findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBarBanner);
 
         // Setup RecyclerView
         recyclerViewSearchResults.setLayoutManager(new GridLayoutManager(this, 2));

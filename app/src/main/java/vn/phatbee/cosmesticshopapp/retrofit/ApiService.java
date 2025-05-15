@@ -142,4 +142,10 @@ public interface ApiService {
 
     @POST("api/orders/cancel/{orderId}")
     Call<Void> cancelOrder(@Path("orderId") int orderId);
+
+    @GET("/api/products/recent")
+    Call<List<Product>> getRecentProducts();
+
+    @POST("/api/products/status")
+    Call<List<Product>> getProductsStatus(@Body List<Long> productIds);
 }

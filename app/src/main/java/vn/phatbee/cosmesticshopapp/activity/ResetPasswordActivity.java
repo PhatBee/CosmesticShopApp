@@ -13,12 +13,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import org.json.JSONObject;
 
@@ -26,7 +22,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import vn.phatbee.cosmesticshopapp.R;
-import vn.phatbee.cosmesticshopapp.model.ForgotPasswordRequest;
 import vn.phatbee.cosmesticshopapp.model.PasswordResetResponse;
 import vn.phatbee.cosmesticshopapp.model.ResetPasswordRequest;
 import vn.phatbee.cosmesticshopapp.retrofit.ApiService;
@@ -61,7 +56,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         editTextNewPassword = findViewById(R.id.editTextNewPassword);
         editTextConfirmPassword = findViewById(R.id.editTextConfirmPassword);
         buttonSubmit = findViewById(R.id.buttonSubmit);
-        progressBar = findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBarBanner);
         textViewResendOtp = findViewById(R.id.textViewResendOtp);
         textViewTimer = findViewById(R.id.textViewTimer);
 

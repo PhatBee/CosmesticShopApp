@@ -1,5 +1,7 @@
 package vn.phatbee.cosmesticshopapp.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 public class Product implements Serializable {
@@ -18,6 +20,8 @@ public class Product implements Serializable {
         private String how_to_use;
         private String description;
         private String volume;
+        private boolean isActive = true;
+
 
     public Long getProductId() {
         return productId;
@@ -137,5 +141,12 @@ public class Product implements Serializable {
 
     public void setVolume(String volume) {
         this.volume = volume;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
     }
 }

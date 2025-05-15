@@ -10,10 +10,11 @@
       android:id="@+id/toolbar"
       android:layout_width="match_parent"
       android:layout_height="?attr/actionBarSize"
-      android:background="#FF5722"
+      android:background="@color/xanh3"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
+      app:tint="@color/white"
       app:titleTextColor="@android:color/white" />
 
   <androidx.recyclerview.widget.RecyclerView
@@ -63,17 +64,17 @@
           android:id="@+id/tvTotalPrice"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:textColor="#FF5722"
+          android:textColor="@color/xanh3"
           android:textSize="16sp"
           android:textStyle="bold"
           tools:text="37.310.000 đ" />
     </LinearLayout>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnConfirmCart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FF5722"
+        android:background="@drawable/bg_blue3"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:text="CONFIRM CART"
@@ -81,7 +82,7 @@
   </LinearLayout>
 
   <ProgressBar
-      android:id="@+id/progressBar"
+      android:id="@+id/progressBarBanner"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:visibility="gone"
@@ -116,12 +117,12 @@
         android:textColor="#757575"
         android:textSize="18sp" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnStartShopping"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="#FF5722"
+        android:background="@drawable/bg_blue3"
         android:text="START SHOPPING"
         android:textColor="@android:color/white" />
   </LinearLayout>
