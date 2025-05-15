@@ -33,7 +33,7 @@ public class OrderProductDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_order_product_details);
 
         // Initialize views
-        ivBack = findViewById(R.id.ivBack);
+        ivBack = findViewById(R.id.ivBackOrderProductDetail);
         iProduct = findViewById(R.id.iProduct);
         tvProductName = findViewById(R.id.tvProductName);
         tvCategory = findViewById(R.id.tvCategory);
