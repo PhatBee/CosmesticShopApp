@@ -24,18 +24,18 @@ import vn.phatbee.cosmesticshopapp.retrofit.RetrofitClient;
 
 public class ProfileActivity extends AppCompatActivity {
     private TextView tvMyAccount;
-    private ImageView ivMyAccount, editAccount;
-    private ImageView btnLogout;
+    private ImageView ivMyAccount, editAccount, ivMyOrder;
+    private ImageView btnLogout, btnBack;
     private ImageView ivAddress;
-    private TextView tvAddress, tvName, tvUsername;
+    private TextView tvAddress, tvName, tvUsername, tvMyOrder;
     private UserSessionManager sessionManager;
 
-
+    //Bottom nav
+    private ImageView ivGioHang, ivDonHang, ivWishList,ivHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_profile);
 
         anhXa();
@@ -71,6 +71,42 @@ public class ProfileActivity extends AppCompatActivity {
             Intent intent = new Intent(ProfileActivity.this, EditAccountActivity.class);
             startActivity(intent);
         });
+
+        ivMyOrder = findViewById(R.id.ivMyOrder);
+        ivMyOrder.setOnClickListener(v ->{
+            Intent intent = new Intent(ProfileActivity.this, OrderListActivity.class);
+            startActivity(intent);
+        });
+
+        //Bottom navigation
+        ivGioHang = findViewById(R.id.ivGioHang);
+        ivWishList = findViewById(R.id.ivYeuThich);
+        ivDonHang = findViewById(R.id.ivDonHang);
+        ivHome  = findViewById(R.id.ivHome);
+
+        // Set up click listeners
+        ivGioHang.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, CartActivity.class);
+            startActivity(intent);
+        });
+
+        ivWishList.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, WishlistActivity.class);
+            startActivity(intent);
+        });
+
+        ivHome.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+            startActivity(intent);
+        });
+
+        ivDonHang.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, OrderListActivity.class);
+            startActivity(intent);
+        });
+
+        btnBack = findViewById(R.id.ivBack);
+        btnBack.setOnClickListener(v -> finish());
 
         // Initialize UserSessionManager
         sessionManager = new UserSessionManager(this);

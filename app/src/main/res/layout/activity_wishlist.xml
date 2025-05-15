@@ -8,13 +8,12 @@
 
     <!-- ScrollView for main content -->
     <ScrollView
-        android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottom_navigation_container">
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,11 +21,12 @@
             android:orientation="vertical">
 
             <!-- Header with Back Button and Title -->
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/layout_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:background="@color/xanh3"
                 android:padding="16dp">
 
                 <ImageView
@@ -34,18 +34,23 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_arrow_back"
-                    app:tint="@android:color/black" />
+                    app:tint="@color/white"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true" />
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="16dp"
+                    android:layout_gravity="center"
                     android:text="Wishlist"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:layout_centerInParent="true" />
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <!-- RecyclerView for Wishlist Items -->
             <androidx.recyclerview.widget.RecyclerView
@@ -59,12 +64,9 @@
 
     <!-- Bottom Navigation -->
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/bottom_navigation_container"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="24dp"
+        android:id="@+id/bottomNavigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -78,7 +80,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -97,8 +100,8 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="8dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:text="Trang Chủ"
                         android:textAlignment="center"
                         android:textColor="@color/white"
@@ -121,8 +124,8 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="8dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:text="Giỏ Hàng"
                         android:textAlignment="center"
                         android:textColor="@color/white"
@@ -145,8 +148,8 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="8dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:text="Yêu thích"
                         android:textAlignment="center"
                         android:textColor="@color/white"
@@ -170,8 +173,8 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="8dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:text="Đơn hàng"
                         android:textAlignment="center"
                         android:textColor="@color/white"
@@ -195,8 +198,8 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="8dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:text="Profile"
                         android:textAlignment="center"
                         android:textColor="@color/white"

@@ -24,4 +24,10 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+
+    <string name="search_hint">Search products...</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="no_products_found">No products found</string>
+    <string name="error_fetching_products">Failed to fetch products</string>
+    <string name="error_message">Error: %1$s</string>
 </resources>
