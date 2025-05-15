@@ -59,12 +59,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         // Product Info
         if (order.getOrderLines() != null && !order.getOrderLines().isEmpty()) {
             // First Product
-            OrderLine firstOrderLine = order.getOrderLines().get(0);
-            Map<String, Object> productSnapshot1 = firstOrderLine.getProductSnapshot();
+            OrderLine firstOrderLineRequest = order.getOrderLines().get(0);
+            Map<String, Object> productSnapshot1 = firstOrderLineRequest.getProductSnapshot();
             if (productSnapshot1 != null) {
                 holder.firstProductLayout.setVisibility(View.VISIBLE);
                 holder.tvProductName1.setText(productSnapshot1.get("productName").toString());
-                holder.tvQuantity1.setText("Số lượng: " + firstOrderLine.getQuantity());
+                holder.tvQuantity1.setText("Số lượng: " + firstOrderLineRequest.getQuantity());
                 String imageUrl1 = productSnapshot1.get("image") != null ? productSnapshot1.get("image").toString() : "";
                 Glide.with(context)
                         .load(imageUrl1)
@@ -76,12 +76,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
             // Second Product (if exists)
             if (order.getOrderLines().size() > 1) {
-                OrderLine secondOrderLine = order.getOrderLines().get(1);
-                Map<String, Object> productSnapshot2 = secondOrderLine.getProductSnapshot();
+                OrderLine secondOrderLineRequest = order.getOrderLines().get(1);
+                Map<String, Object> productSnapshot2 = secondOrderLineRequest.getProductSnapshot();
                 if (productSnapshot2 != null) {
                     holder.secondProductLayout.setVisibility(View.VISIBLE);
                     holder.tvProductName2.setText(productSnapshot2.get("productName").toString());
-                    holder.tvQuantity2.setText("Số lượng: " + secondOrderLine.getQuantity());
+                    holder.tvQuantity2.setText("Số lượng: " + secondOrderLineRequest.getQuantity());
                     String imageUrl2 = productSnapshot2.get("image") != null ? productSnapshot2.get("image").toString() : "";
                     Glide.with(context)
                             .load(imageUrl2)
@@ -153,12 +153,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         });
     }
 
-    private void toggleExpand(OrderViewHolder holder, List<OrderLine> orderLines) {
+    private void toggleExpand(OrderViewHolder holder, List<OrderLine> orderLineRequests) {
         if (holder.expandableProductContainer.getVisibility() == View.GONE) {
             holder.expandableProductContainer.removeAllViews();
-            for (int i = 2; i < orderLines.size(); i++) {
-                OrderLine orderLine = orderLines.get(i);
-                Map<String, Object> productSnapshot = orderLine.getProductSnapshot();
+            for (int i = 2; i < orderLineRequests.size(); i++) {
+                OrderLine orderLineRequest = orderLineRequests.get(i);
+                Map<String, Object> productSnapshot = orderLineRequest.getProductSnapshot();
                 if (productSnapshot != null) {
                     View productView = LayoutInflater.from(context).inflate(R.layout.row_order_product, holder.expandableProductContainer, false);
                     ImageView ivProductImage = productView.findViewById(R.id.ivProductImage);
@@ -166,7 +166,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                     TextView tvQuantity = productView.findViewById(R.id.tvQuantity);
 
                     tvProductName.setText(productSnapshot.get("productName").toString());
-                    tvQuantity.setText("Số lượng: " + orderLine.getQuantity());
+                    tvQuantity.setText("Số lượng: " + orderLineRequest.getQuantity());
                     String imageUrl = productSnapshot.get("image") != null ? productSnapshot.get("image").toString() : "";
                     Glide.with(context)
                             .load(imageUrl)

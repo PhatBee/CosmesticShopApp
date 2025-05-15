@@ -1,10 +1,12 @@
 package vn.phatbee.cosmesticshopapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,20 +14,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import vn.phatbee.cosmesticshopapp.R;
+import vn.phatbee.cosmesticshopapp.activity.OrderProductDetailsActivity;
 import vn.phatbee.cosmesticshopapp.model.OrderLine;
 
 public class OrderLineAdapter extends RecyclerView.Adapter<OrderLineAdapter.OrderLineViewHolder> {
 
     private Context context;
-    private List<OrderLine> orderLines;
+    private List<OrderLine> orderLine;
 
-    public OrderLineAdapter(Context context, List<OrderLine> orderLines) {
+    public OrderLineAdapter(Context context, List<OrderLine> orderLine) {
         this.context = context;
-        this.orderLines = orderLines;
+        this.orderLine = orderLine;
     }
 
     @NonNull
@@ -37,22 +41,19 @@ public class OrderLineAdapter extends RecyclerView.Adapter<OrderLineAdapter.Orde
 
     @Override
     public void onBindViewHolder(@NonNull OrderLineViewHolder holder, int position) {
-        OrderLine orderLine = orderLines.get(position);
-        Map<String, Object> productSnapshot = orderLine.getProductSnapshot();
+        OrderLine orderLineRequest = orderLine.get(position);
+        Map<String, Object> productSnapshot = orderLineRequest.getProductSnapshot();
 
         if (productSnapshot != null) {
-            // Hiển thị tên sản phẩm
             holder.tvProductName.setText(productSnapshot.get("productName").toString());
+            holder.tvQuantity.setText("Số lượng: " + orderLineRequest.getQuantity());
 
-            // Hiển thị số lượng
-            holder.tvQuantity.setText("Số lượng: " + orderLine.getQuantity());
-
-            // Hiển thị giá tiền
             if (productSnapshot.containsKey("price")) {
                 double price = Double.parseDouble(productSnapshot.get("price").toString());
-                holder.tvPrice.setText("Giá: " + String.format("%,.0f VND", price));
+                double totalPrice = price * orderLineRequest.getQuantity();
+                holder.tvPrice.setText(String.format("%,.0f VND", totalPrice));
             } else {
-                holder.tvPrice.setText("Giá: N/A");
+                holder.tvPrice.setText("N/A");
             }
 
             // Hiển thị hình ảnh
@@ -62,16 +63,25 @@ public class OrderLineAdapter extends RecyclerView.Adapter<OrderLineAdapter.Orde
                     .placeholder(R.drawable.ic_launcher_background)
                     .into(holder.ivProductImage);
         }
+
+        // Handle click event to view product details
+        holder.itemContainer.setOnClickListener(v -> {
+            Intent intent = new Intent(context, OrderProductDetailsActivity.class);
+            intent.putExtra("productSnapshot", new HashMap<>(productSnapshot)); // Pass snapshot as HashMap
+            intent.putExtra("productId", orderLineRequest.getProductId());
+            context.startActivity(intent);
+        });
     }
 
     @Override
     public int getItemCount() {
-        return orderLines.size();
+        return orderLine.size();
     }
 
     static class OrderLineViewHolder extends RecyclerView.ViewHolder {
         ImageView ivProductImage;
         TextView tvProductName, tvQuantity, tvPrice; // Thêm tvPrice
+        LinearLayout itemContainer; // Container for click event
 
         public OrderLineViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -79,6 +89,8 @@ public class OrderLineAdapter extends RecyclerView.Adapter<OrderLineAdapter.Orde
             tvProductName = itemView.findViewById(R.id.tvProductName);
             tvQuantity = itemView.findViewById(R.id.tvQuantity);
             tvPrice = itemView.findViewById(R.id.tvPrice); // Khởi tạo tvPrice
+            itemContainer = itemView.findViewById(R.id.itemContainer);
+
         }
     }
 }

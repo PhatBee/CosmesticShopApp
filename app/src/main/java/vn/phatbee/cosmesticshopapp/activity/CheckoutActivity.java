@@ -367,8 +367,8 @@ public class CheckoutActivity extends AppCompatActivity {
         // Step 2: Prepare order lines with product snapshots
         List<OrderLine> orderLineRequests = new ArrayList<>();
         for (CartItem item : selectedCartItems) {
-            OrderLine orderLineRequest = getOrderLineRequest(item);
-            orderLineRequests.add(orderLineRequest);
+            OrderLine orderLine = getOrderLineRequest(item);
+            orderLineRequests.add(orderLine);
         }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -488,11 +488,11 @@ public class CheckoutActivity extends AppCompatActivity {
         snapshot.put("manufactureDate", product.getManufactureDate());
         snapshot.put("expirationDate", product.getExpirationDate());
         snapshot.put("createdDate", product.getCreatedDate());
-        OrderLine orderLineRequest = new OrderLine(
+        OrderLine orderLine = new OrderLine(
                 item.getProduct().getProductId(),
                 item.getQuantity(),
                 snapshot
         );
-        return orderLineRequest;
+        return orderLine;
     }
 }

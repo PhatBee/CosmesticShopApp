@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
@@ -12,15 +13,21 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import vn.phatbee.cosmesticshopapp.R;
 import vn.phatbee.cosmesticshopapp.manager.UserSessionManager;
+import vn.phatbee.cosmesticshopapp.model.User;
+import vn.phatbee.cosmesticshopapp.retrofit.ApiService;
+import vn.phatbee.cosmesticshopapp.retrofit.RetrofitClient;
 
 public class ProfileActivity extends AppCompatActivity {
     private TextView tvMyAccount;
     private ImageView ivMyAccount, editAccount;
     private ImageView btnLogout;
     private ImageView ivAddress;
-    private TextView tvAddress;
+    private TextView tvAddress, tvName, tvUsername;
     private UserSessionManager sessionManager;
 
 
@@ -82,10 +89,42 @@ public class ProfileActivity extends AppCompatActivity {
                     .show();
         });
 
+        Long userId = sessionManager.getUserDetails().getUserId();
+        if (userId == null || userId == 0) {
+            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+        Call<User> call = apiService.getUser(userId);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    User user = response.body();
+                    // Update UI
+                    tvName.setText(user.getFullName() != null ? user.getFullName() : "");
+                    tvUsername.setText(user.getUsername() != null ? user.getUsername() : "");
+
+                    // Update session
+                    sessionManager.createLoginSession(user);
+                } else {
+                    Toast.makeText(ProfileActivity.this, "Failed to fetch user data: " + response.message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(ProfileActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void anhXa() {
         btnLogout = findViewById(R.id.ivLogout);
+        tvName = findViewById(R.id.tv_name);
+        tvUsername = findViewById(R.id.tv_username);
     }
 
 }
