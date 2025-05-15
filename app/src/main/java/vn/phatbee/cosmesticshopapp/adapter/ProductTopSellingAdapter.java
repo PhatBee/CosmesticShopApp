@@ -103,7 +103,7 @@ public class ProductTopSellingAdapter extends RecyclerView.Adapter<ProductTopSel
             tvProductName.setText(product.getProductName() != null ? product.getProductName() : "Unknown Product");
             Double price = product.getPrice();
             if (price != null) {
-                tvProductPrice.setText(String.format("%.2f VNĐ", price));
+                tvProductPrice.setText(String.format("%,.0f VND", price));
             } else {
                 tvProductPrice.setText("Price Unavailable");
             }

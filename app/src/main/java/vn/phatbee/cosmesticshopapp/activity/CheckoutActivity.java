@@ -34,7 +34,9 @@ import vn.phatbee.cosmesticshopapp.R;
 import vn.phatbee.cosmesticshopapp.adapter.CartItemCheckoutAdapter;
 import vn.phatbee.cosmesticshopapp.manager.UserSessionManager;
 import vn.phatbee.cosmesticshopapp.model.Address;
+import vn.phatbee.cosmesticshopapp.model.Cart;
 import vn.phatbee.cosmesticshopapp.model.CartItem;
+import vn.phatbee.cosmesticshopapp.model.CartItemLite;
 import vn.phatbee.cosmesticshopapp.model.OrderLine;
 import vn.phatbee.cosmesticshopapp.model.OrderRequest;
 import vn.phatbee.cosmesticshopapp.model.Payment;
@@ -92,36 +94,35 @@ public class CheckoutActivity extends AppCompatActivity {
 
         // Get selected cart items from Intent
         Object extra = getIntent().getSerializableExtra("selectedCartItems");
+        List<CartItemLite> liteItems = new ArrayList<>();
         if (extra instanceof List<?>) {
-            selectedCartItems = new ArrayList<>();
             for (Object item : (List<?>) extra) {
-                if (item instanceof CartItem) {
-                    selectedCartItems.add((CartItem) item);
+                if (item instanceof CartItemLite) {
+                    liteItems.add((CartItemLite) item);
                 }
             }
-        } else {
-            selectedCartItems = new ArrayList<>();
         }
-        if (selectedCartItems == null || selectedCartItems.isEmpty()) {
+        if (liteItems.isEmpty()) {
             Toast.makeText(this, "No items selected for checkout", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        // Setup RecyclerView with selected items
+        // Initialize selectedCartItems
+        selectedCartItems = new ArrayList<>();
+
+        // Setup RecyclerView
         rvCartItems.setLayoutManager(new LinearLayoutManager(this));
         cartItemAdapter = new CartItemCheckoutAdapter(this, selectedCartItems);
         rvCartItems.setAdapter(cartItemAdapter);
-        updateTotalPrice();
+
+        // Fetch full CartItem details
+        fetchCartItems(liteItems);
 
         // Register ActivityResultLauncher for address selection
         addressListLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-//                    if (result.getResultCode() == RESULT_OK) {
-//                        loadDefaultAddress();
-//                    }
-
                     if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                         selectedAddress = (Address) result.getData().getSerializableExtra("selectedAddress");
                         if (selectedAddress != null) {
@@ -131,8 +132,6 @@ public class CheckoutActivity extends AppCompatActivity {
                                     selectedAddress.getDistrict() != null ? selectedAddress.getDistrict() : "",
                                     selectedAddress.getProvince() != null ? selectedAddress.getProvince() : "");
                             tvAddress.setText(addressText);
-
-                            // Cập nhật tvPhone với receiverPhone từ selectedAddress
                             tvPhone.setText(selectedAddress.getReceiverPhone() != null ? selectedAddress.getReceiverPhone() : "Chưa có số điện thoại");
                         }
                     }
@@ -146,7 +145,7 @@ public class CheckoutActivity extends AppCompatActivity {
                         String action = result.getData().getStringExtra("action");
                         Log.d("VNPayResult", "Action: " + action);
                         if ("SuccessBackAction".equals(action)) {
-                            placeOrder("VNPay"); // Xử lý đặt hàng sau khi thanh toán thành công
+                            placeOrder("VNPay");
                         } else if ("FaildBackAction".equals(action) || "WebBackAction".equals(action)) {
                             Toast.makeText(this, "Payment failed or cancelled", Toast.LENGTH_SHORT).show();
                         }
@@ -155,16 +154,12 @@ public class CheckoutActivity extends AppCompatActivity {
 
         // Setup click listeners
         ivBack.setOnClickListener(v -> finish());
-
         ivEditAddressCheckout.setOnClickListener(v -> {
             Intent intent = new Intent(CheckoutActivity.this, AddressListActivity.class);
-
             intent.putExtra("selectMode", true);
-
             addressListLauncher.launch(intent);
         });
         ivEditContact.setOnClickListener(v -> {
-            // Navigate to EditContactActivity (to be implemented)
             Toast.makeText(this, "Edit contact info not implemented", Toast.LENGTH_SHORT).show();
         });
         btnEditPayment.setOnClickListener(v -> rgPaymentMethod.setVisibility(View.VISIBLE));
@@ -173,6 +168,60 @@ public class CheckoutActivity extends AppCompatActivity {
         // Load data
         loadDefaultAddress();
         loadContactInfo();
+    }
+
+    private void fetchCartItems(List<CartItemLite> liteItems) {
+        Long userId = sessionManager.getUserDetails().getUserId();
+        if (userId == null || userId == 0) {
+            Toast.makeText(this, "Please log in to proceed", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        Call<Cart> call = apiService.getCart(userId);
+        call.enqueue(new Callback<Cart>() {
+            @Override
+            public void onResponse(Call<Cart> call, Response<Cart> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Cart cart = response.body();
+                    if (cart != null && cart.getCartItems() != null) {
+                        for (CartItemLite liteItem : liteItems) {
+                            for (CartItem item : cart.getCartItems()) {
+                                if (item.getCartItemId().equals(liteItem.getCartItemId())) {
+                                    // Create a new CartItem with the fetched data and liteItem's quantity
+                                    CartItem cartItem = new CartItem();
+                                    cartItem.setCartItemId(item.getCartItemId());
+                                    cartItem.setProduct(item.getProduct());
+                                    cartItem.setQuantity(liteItem.getQuantity());
+                                    cartItem.setCart(item.getCart());
+                                    selectedCartItems.add(cartItem);
+                                    break;
+                                }
+                            }
+                        }
+                        if (selectedCartItems.isEmpty()) {
+                            Toast.makeText(CheckoutActivity.this, "No matching cart items found", Toast.LENGTH_SHORT).show();
+                            finish();
+                            return;
+                        }
+                        cartItemAdapter.notifyDataSetChanged();
+                        updateTotalPrice();
+                    } else {
+                        Toast.makeText(CheckoutActivity.this, "No items found in cart", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                } else {
+                    Toast.makeText(CheckoutActivity.this, "Failed to load cart items: " + response.message(), Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Cart> call, Throwable t) {
+                Toast.makeText(CheckoutActivity.this, "Error loading cart items: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
     }
 
     private void loadDefaultAddress() {
