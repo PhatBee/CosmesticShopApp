@@ -53,7 +53,7 @@
                 android:text="Bắt đầu"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                android:textSize="26dp"
+                android:textSize="26sp"
                 />
         </LinearLayout>
     </ScrollView>
