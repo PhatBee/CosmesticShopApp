@@ -26,7 +26,7 @@
                 android:id="@+id/linearLayout6">
 
                 <ImageView
-                    android:id="@+id/ivBack"
+                    android:id="@+id/ivBackProductDetail"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     app:layout_constraintStart_toStartOf="@id/linearLayout6"

@@ -2,42 +2,52 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
         <!-- Header -->
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/layout_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:background="@color/xanh3"
+            android:padding="16dp">
 
             <ImageView
                 android:id="@+id/ivBack"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_arrow_back" />
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@color/white"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="16dp"
-                android:text="Chi tiết sản phẩm (Lưu trữ)"
+                android:layout_gravity="center"
+                android:text="Product Details (Stored)"
                 android:textSize="20sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_centerInParent="true" />
+
+        </RelativeLayout>
 
         <!-- Product Image -->
         <ImageView
             android:id="@+id/iProduct"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
             android:scaleType="centerCrop" />
 
@@ -45,6 +55,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
             android:orientation="vertical">
 
@@ -139,11 +150,14 @@
         </LinearLayout>
 
         <!-- Button to View Current Product -->
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnViewCurrentProduct"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
+            android:background="@drawable/bg_blue3"
+            android:textColor="@color/white"
             android:text="Xem thông tin sản phẩm hiện tại" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

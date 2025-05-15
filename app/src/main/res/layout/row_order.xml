@@ -186,12 +186,15 @@
     </LinearLayout>
 
     <!-- Thêm nút Xem chi tiết -->
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnViewDetails"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="36dp"
+        android:background="@drawable/bg_blue3"
         android:layout_gravity="end"
-        android:layout_marginTop="8dp"
+        android:padding="10dp"
+        android:textColor="@color/white"
+        android:textSize="12sp"
         android:text="Xem chi tiết" />
 
 </androidx.cardview.widget.CardView>

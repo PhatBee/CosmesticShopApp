@@ -26,18 +26,18 @@ import vn.phatbee.cosmesticshopapp.retrofit.RetrofitClient;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductRecentAdapter extends RecyclerView.Adapter<ProductRecentAdapter.ProductViewHolder> {
-    private static final String TAG = "ProductRecentAdapter";
+public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.ProductViewHolder> {
+    private static final String TAG = "AllProductsAdapter";
     private Context context;
     private List<Product> products;
-    private OnProductRecentClickListener listener;
+    private OnProductClickListener listener;
     private UserSessionManager sessionManager;
 
-    public interface OnProductRecentClickListener {
-        void onProductRecentClick(Product product);
+    public interface OnProductClickListener {
+        void onProductClick(Product product);
     }
 
-    public ProductRecentAdapter(Context context, OnProductRecentClickListener listener, UserSessionManager sessionManager) {
+    public AllProductsAdapter(Context context, OnProductClickListener listener, UserSessionManager sessionManager) {
         this.context = context;
         this.products = new ArrayList<>();
         this.listener = listener;
@@ -72,6 +72,7 @@ public class ProductRecentAdapter extends RecyclerView.Adapter<ProductRecentAdap
         ImageView ivProductImage;
         TextView tvProductName;
         TextView tvProductPrice;
+        TextView tvSalesQuantity;
         ImageView ivWishlist;
         boolean isInWishlist;
 
@@ -80,11 +81,12 @@ public class ProductRecentAdapter extends RecyclerView.Adapter<ProductRecentAdap
             ivProductImage = itemView.findViewById(R.id.ivProduct);
             tvProductName = itemView.findViewById(R.id.tvProductName);
             tvProductPrice = itemView.findViewById(R.id.tvPrice);
+            tvSalesQuantity = itemView.findViewById(R.id.tvSalesQuantity);
             ivWishlist = itemView.findViewById(R.id.ivWishlist);
 
             itemView.setOnClickListener(v -> {
                 if (listener != null) {
-                    listener.onProductRecentClick(products.get(getAdapterPosition()));
+                    listener.onProductClick(products.get(getAdapterPosition()));
                 }
             });
 
@@ -107,6 +109,9 @@ public class ProductRecentAdapter extends RecyclerView.Adapter<ProductRecentAdap
                     .placeholder(R.drawable.ic_launcher_background)
                     .error(R.drawable.ic_launcher_background)
                     .into(ivProductImage);
+
+            // Ẩn tvSalesQuantity vì đây là danh sách tất cả sản phẩm, không cần hiển thị số lượng bán
+            tvSalesQuantity.setVisibility(View.GONE);
 
             checkWishlistStatus(product);
         }
