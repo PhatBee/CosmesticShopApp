@@ -165,4 +165,10 @@ public interface ApiService {
 
     @GET("/api/products")
     Call<List<Product>> getAllProducts();
+
+    @GET("/api/products/{productId}/average-rating")
+    Call<Double> getAverageRating(@Path("productId") Long productId);
+
+    @GET("/api/product-feedbacks/product/{productId}")
+    Call<List<ProductFeedback>> getFeedbackByProductId(@Path("productId") Long productId);
 }

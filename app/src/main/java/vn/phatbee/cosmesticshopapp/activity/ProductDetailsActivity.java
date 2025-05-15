@@ -7,27 +7,29 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
-
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
-
-import java.util.ArrayList;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import vn.phatbee.cosmesticshopapp.R;
+import vn.phatbee.cosmesticshopapp.adapter.FeedbackAdapter;
 import vn.phatbee.cosmesticshopapp.manager.UserSessionManager;
 import vn.phatbee.cosmesticshopapp.model.Cart;
 import vn.phatbee.cosmesticshopapp.model.CartItem;
 import vn.phatbee.cosmesticshopapp.model.CartItemRequest;
 import vn.phatbee.cosmesticshopapp.model.Product;
+import vn.phatbee.cosmesticshopapp.model.ProductFeedback;
 import vn.phatbee.cosmesticshopapp.model.Wishlist;
 import vn.phatbee.cosmesticshopapp.retrofit.ApiService;
 import vn.phatbee.cosmesticshopapp.retrofit.RetrofitClient;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductDetailsActivity extends AppCompatActivity {
 
@@ -38,19 +40,22 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private TextView tvProductName, tvCategory, tvPrice, tvBrand, tvVolume;
     private TextView tvOrigin, tvManufactureDate, tvExpirationDate;
     private TextView tvDescription, tvHowToUse, tvIngredients;
+    private TextView tvAverageRating;
+    private RecyclerView rvFeedback;
     private AppCompatButton btnBuy;
     private Toolbar toolbar;
     private Product currentProduct;
     private Long productId;
     private UserSessionManager sessionManager;
     private boolean isInWishlist = false;
+    private FeedbackAdapter feedbackAdapter;
+    private List<ProductFeedback> feedbackList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_details);
 
-        // Initialize UserSessionManager
         sessionManager = new UserSessionManager(this);
 
         anhXa();
@@ -62,36 +67,35 @@ public class ProductDetailsActivity extends AppCompatActivity {
             return;
         }
 
+        feedbackList = new ArrayList<>();
+        feedbackAdapter = new FeedbackAdapter(this, feedbackList);
+        rvFeedback.setLayoutManager(new LinearLayoutManager(this));
+        rvFeedback.setAdapter(feedbackAdapter);
+
         btnback.setOnClickListener(view -> finish());
 
-        // Add to cart listener
         btnCart.setOnClickListener(view -> {
             if (currentProduct == null) {
                 Toast.makeText(this, "Product details not loaded", Toast.LENGTH_SHORT).show();
                 return;
             }
-            addToCart(1L, false); // Add to cart without navigating
+            addToCart(1L, false);
         });
 
-        // Buy now listener
         btnBuy.setOnClickListener(view -> {
             if (currentProduct == null) {
                 Toast.makeText(this, "Product details not loaded", Toast.LENGTH_SHORT).show();
                 return;
             }
-            addToCart(1L, true); // Add to cart and navigate to CheckoutActivity
-        });
-
-        btnWish = findViewById(R.id.ivWishlist);
-        btnWish.setOnClickListener(v -> {
-            Intent intent = new Intent(ProductDetailsActivity.this, WishlistActivity.class);
-            startActivity(intent);
+            addToCart(1L, true);
         });
 
         btnWish.setOnClickListener(view -> toggleWishlist());
 
         getProductDetails();
         checkWishlistStatus();
+        loadAverageRating();
+        loadFeedback();
     }
 
     void anhXa() {
@@ -111,6 +115,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
         tvDescription = findViewById(R.id.tvDescription);
         tvHowToUse = findViewById(R.id.tvHowToUse);
         tvIngredients = findViewById(R.id.tvIngredients);
+        tvAverageRating = findViewById(R.id.tvAverageRating);
+        rvFeedback = findViewById(R.id.rvFeedback);
         toolbar = findViewById(R.id.toolbar);
     }
 
@@ -156,19 +162,71 @@ public class ProductDetailsActivity extends AppCompatActivity {
         }
     }
 
+    private void loadAverageRating() {
+        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+        Call<Double> call = apiService.getAverageRating(productId);
+        call.enqueue(new Callback<Double>() {
+            @Override
+            public void onResponse(Call<Double> call, Response<Double> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    double averageRating = response.body();
+                    tvAverageRating.setText(String.format("Average Rating: %.1f/5", averageRating));
+                } else {
+                    tvAverageRating.setText("No ratings yet");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Double> call, Throwable t) {
+                Log.e(TAG, "Error loading average rating: " + t.getMessage());
+                tvAverageRating.setText("Error loading rating");
+            }
+        });
+    }
+
+    private void loadFeedback() {
+        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+        Call<List<ProductFeedback>> call = apiService.getFeedbackByProductId(productId);
+        call.enqueue(new Callback<List<ProductFeedback>>() {
+            @Override
+            public void onResponse(Call<List<ProductFeedback>> call, Response<List<ProductFeedback>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    feedbackList.clear();
+                    feedbackList.addAll(response.body());
+                    Log.d(TAG, "Feedback loaded: " + feedbackList.size() + " items");
+                    feedbackAdapter.notifyDataSetChanged();
+                    if (feedbackList.isEmpty()) {
+                        rvFeedback.setVisibility(View.GONE);
+                        Toast.makeText(ProductDetailsActivity.this, "No feedback available", Toast.LENGTH_SHORT).show();
+                    } else {
+                        rvFeedback.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    Log.e(TAG, "Failed to load feedback: HTTP " + response.code() + ", message: " + response.message());
+                    rvFeedback.setVisibility(View.GONE);
+                    Toast.makeText(ProductDetailsActivity.this, "Failed to load feedback", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ProductFeedback>> call, Throwable t) {
+                Log.e(TAG, "Error loading feedback: " + t.getMessage(), t);
+                rvFeedback.setVisibility(View.GONE);
+                Toast.makeText(ProductDetailsActivity.this, "Error loading feedback: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void addToCart(Long quantity, boolean navigateToCheckout) {
-        // Check if user is logged in
         Long userId = sessionManager.getUserDetails().getUserId();
         if (userId == null || userId == 0) {
             Toast.makeText(this, "Please log in to add items to cart", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Create CartItemRequest
         CartItemRequest cartItemRequest = new CartItemRequest(userId, currentProduct.getProductId(), quantity);
         Log.d(TAG, "Adding to cart: userId=" + userId + ", productId=" + currentProduct.getProductId() + ", quantity=" + quantity);
 
-        // Make API call to add to cart
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
         Call<Cart> call = apiService.addToCart(cartItemRequest);
         call.enqueue(new Callback<Cart>() {
@@ -218,9 +276,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
         CartItem cartItem = new CartItem();
         cartItem.setProduct(currentProduct);
         cartItem.setQuantity(quantity);
-        cartItem.setCartItemId(System.currentTimeMillis()); // Temporary ID for local use
+        cartItem.setCartItemId(System.currentTimeMillis());
         return cartItem;
     }
+
     private void checkWishlistStatus() {
         Long userId = sessionManager.getUserDetails().getUserId();
         if (userId == null || userId == 0) {
@@ -245,6 +304,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             }
         });
     }
+
     private void toggleWishlist() {
         Long userId = sessionManager.getUserDetails().getUserId();
         if (userId == null || userId == 0) {
