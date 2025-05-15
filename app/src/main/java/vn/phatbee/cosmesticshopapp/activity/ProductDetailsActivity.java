@@ -95,7 +95,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     }
 
     void anhXa() {
-        btnback = findViewById(R.id.ivBack);
+        btnback = findViewById(R.id.ivBackProductDetail);
         iProduct = findViewById(R.id.iProduct);
         btnWish = findViewById(R.id.ibtnWish);
         btnCart = findViewById(R.id.ibtnCart);
