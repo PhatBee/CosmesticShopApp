@@ -64,7 +64,7 @@ public class CheckoutActivity extends AppCompatActivity {
     private List<CartItem> selectedCartItems;
 
     private String tmnCode = "KB5K1R3O"; // Thay bằng mã TMN mà VNPay cung cấp
-    private String scheme = "cosmesticshopapp"; // Thay bằng scheme bạn đã cấu hình
+    private String scheme = "cosmesticmobile"; // Thay bằng scheme bạn đã cấu hình
     private ActivityResultLauncher<Intent> vnpayLauncher;
 
     @Override

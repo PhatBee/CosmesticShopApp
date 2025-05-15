@@ -42,6 +42,8 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.annotation)
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -62,4 +64,5 @@ dependencies {
 
     // VNPAY SDK .aar
     implementation(files("libs/merchant-1.0.25.aar"))
+    implementation ("com.google.android.material:material:1.9.0")
 }

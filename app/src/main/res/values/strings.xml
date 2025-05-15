@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">PTC</string>
     <string name="introText">
-        <b><font color="#147E9E">Radiate</font></b>
+        <b><font color="#FFFFFFFF">Radiate</font></b>
         <b><font color="#FF000000">Confidence</font></b>\n
         <b><font color="#FF000000">Your Beauty,</font></b>\n
         <b><font color="#FF000000">Your Way</font></b>

@@ -1,7 +1,10 @@
 package vn.phatbee.cosmesticshopapp.activity;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -11,20 +14,27 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.io.Serializable;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import vn.phatbee.cosmesticshopapp.R;
 import vn.phatbee.cosmesticshopapp.adapter.OrderLineAdapter;
+import vn.phatbee.cosmesticshopapp.manager.UserSessionManager;
+import vn.phatbee.cosmesticshopapp.model.Cart;
+import vn.phatbee.cosmesticshopapp.model.CartItemRequest;
 import vn.phatbee.cosmesticshopapp.model.Order;
 import vn.phatbee.cosmesticshopapp.model.OrderLine;
+import vn.phatbee.cosmesticshopapp.model.Product;
 import vn.phatbee.cosmesticshopapp.model.ShippingAddress;
 import vn.phatbee.cosmesticshopapp.retrofit.ApiService;
 import vn.phatbee.cosmesticshopapp.retrofit.RetrofitClient;
@@ -34,10 +44,11 @@ public class OrderDetailActivity extends AppCompatActivity {
     private TextView tvOrderId, tvOrderDate, tvStatus, tvReceiverName, tvReceiverPhone, tvAddress, tvPaymentMethod, tvTotal, tvPaymentTime;
     private ImageView ivBack;
     private RecyclerView rvOrderItems;
-    private Button btnCancelOrder, btnReviewProduct;
+    private Button btnCancelOrder, btnReviewProduct, btnBuyAgain;
     private Order order;
     private OrderLineAdapter orderLineAdapter;
     private ApiService apiService;
+    private UserSessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +69,11 @@ public class OrderDetailActivity extends AppCompatActivity {
         btnCancelOrder = findViewById(R.id.btnCancelOrder);
         btnReviewProduct = findViewById(R.id.btnViewRate);
         tvPaymentTime = findViewById(R.id.tvPaymentTime);
+        btnBuyAgain = findViewById(R.id.btnMuaLai);
+
 
         apiService = RetrofitClient.getClient().create(ApiService.class);
+        sessionManager = new UserSessionManager(this);
 
         // Nhận dữ liệu từ Intent
         order = (Order) getIntent().getSerializableExtra("order");
@@ -142,6 +156,8 @@ public class OrderDetailActivity extends AppCompatActivity {
 
         // Xử lý nút quay lại
         ivBack.setOnClickListener(v -> finish());
+
+        btnBuyAgain.setOnClickListener(v -> buyAgain());
     }
 
     private String getStatusText(String status) {
@@ -153,6 +169,122 @@ public class OrderDetailActivity extends AppCompatActivity {
             case "CANCELLED": return "Đã hủy";
             default: return "Không xác định";
         }
+    }
+
+    private void buyAgain() {
+        Long userId = sessionManager.getUserDetails().getUserId();
+        if (userId == null || userId == 0) {
+            Toast.makeText(this, "Vui lòng đăng nhập để tiếp tục", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            return;
+        }
+
+        // Prepare list of product IDs and cart item requests
+        List<Long> productIds = new ArrayList<>();
+        List<CartItemRequest> cartItemRequests = new ArrayList<>();
+        for (OrderLine orderLine : order.getOrderLines()) {
+            productIds.add(orderLine.getProductId());
+            CartItemRequest request = new CartItemRequest();
+            request.setUserId(userId);
+            request.setProductId(orderLine.getProductId());
+            request.setQuantity(orderLine.getQuantity());
+            cartItemRequests.add(request);
+        }
+
+        Log.d(TAG, "Checking product status for product IDs: " + productIds);
+
+        // Check product status
+        Call<List<Product>> call = apiService.getProductsStatus(productIds);
+        Log.d(TAG, "API Call URL: " + call.request().url());
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.d(TAG, "Product status response: " + response.body());
+                    List<Product> products = response.body();
+                    List<CartItemRequest> validRequests = new ArrayList<>();
+                    List<String> unavailableProducts = new ArrayList<>();
+
+                    for (CartItemRequest request : cartItemRequests) {
+                        Product product = products.stream()
+                                .filter(p -> p.getProductId().equals(request.getProductId()))
+                                .findFirst()
+                                .orElse(null);
+                        if (product != null && product.isActive()) {
+                            validRequests.add(request);
+                        } else {
+                            OrderLine orderLine = order.getOrderLines().stream()
+                                    .filter(ol -> ol.getProductId().equals(request.getProductId()))
+                                    .findFirst()
+                                    .orElse(null);
+                            if (orderLine != null) {
+                                Map<String, Object> snapshot = orderLine.getProductSnapshot();
+                                unavailableProducts.add((String) snapshot.get("productName"));
+                            }
+                        }
+                    }
+
+                    if (!unavailableProducts.isEmpty()) {
+                        String message = "Các sản phẩm không còn khả dụng: " + String.join(", ", unavailableProducts);
+                        Log.w(TAG, message);
+                        Toast.makeText(OrderDetailActivity.this, message, Toast.LENGTH_LONG).show();
+                    }
+
+                    if (!validRequests.isEmpty()) {
+                        addToCart(validRequests);
+                    } else {
+                        Log.w(TAG, "No valid products to add to cart");
+                        Toast.makeText(OrderDetailActivity.this,
+                                "Không có sản phẩm nào có thể thêm vào giỏ hàng",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    String errorMessage = "Lỗi khi kiểm tra sản phẩm. Mã lỗi: " + response.code() + ", Thông điệp: " + response.message();
+                    Log.e(TAG, errorMessage);
+                    Toast.makeText(OrderDetailActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                String errorMessage = "Lỗi mạng khi kiểm tra sản phẩm: " + t.getMessage();
+                Log.e(TAG, errorMessage, t);
+                Toast.makeText(OrderDetailActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+    private void addToCart(List<CartItemRequest> requests) {
+        Long userId = sessionManager.getUserDetails().getUserId();
+        for (CartItemRequest request : requests) {
+            Log.d(TAG, "Adding to cart: " + request.getProductId() + ", Quantity: " + request.getQuantity());
+            Call<Cart> call = apiService.addToCart(request);
+            call.enqueue(new Callback<Cart>() {
+                @Override
+                public void onResponse(Call<Cart> call, Response<Cart> response) {
+                    if (response.isSuccessful()) {
+                        Log.d(TAG, "Successfully added product " + request.getProductId() + " to cart");
+                    } else {
+                        String errorMessage = "Lỗi khi thêm sản phẩm " + request.getProductId() + ": " + response.message();
+                        Log.e(TAG, errorMessage);
+                        Toast.makeText(OrderDetailActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Cart> call, Throwable t) {
+                    String errorMessage = "Lỗi mạng khi thêm sản phẩm: " + t.getMessage();
+                    Log.e(TAG, errorMessage, t);
+                    Toast.makeText(OrderDetailActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        // Navigate to CartActivity
+        Log.d(TAG, "Navigating to CartActivity");
+        Intent intent = new Intent(OrderDetailActivity.this, CartActivity.class);
+        startActivity(intent);
+        Toast.makeText(OrderDetailActivity.this, "Đã thêm sản phẩm vào giỏ hàng", Toast.LENGTH_SHORT).show();
     }
 
     private void cancelOrder() {

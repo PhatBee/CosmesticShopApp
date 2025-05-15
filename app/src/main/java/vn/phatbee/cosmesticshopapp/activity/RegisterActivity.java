@@ -14,11 +14,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import org.json.JSONObject;
 
@@ -51,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
         editTextConfirmPassword = findViewById(R.id.editTextConfirmPassword);
         radioGroupGender = findViewById(R.id.radioGroupGender);
         buttonRegister = findViewById(R.id.buttonRegister);
-        progressBar = findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBarBanner);
         textViewLogin = findViewById(R.id.textViewLogin);
 
         // Set click listener for register button

@@ -54,7 +54,7 @@ public class OtpVerificationActivity extends AppCompatActivity {
         // Initialize views
         editTextOtp = findViewById(R.id.editTextOtp);
         buttonVerifyOtp = findViewById(R.id.buttonVerifyOtp);
-        progressBar = findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBarBanner);
         textViewResendOtp = findViewById(R.id.textViewResendOtp);
         textViewTimer = findViewById(R.id.textViewTimer);
 

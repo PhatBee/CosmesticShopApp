@@ -58,19 +58,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:background="@drawable/border"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="@+id/tvCurrentPrice"
         app:layout_constraintTop_toBottomOf="@+id/tvCurrentPrice">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnDecrease"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:background="@android:color/white"
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:text="-"
             android:textColor="@android:color/black"
+
             android:textSize="16sp" />
 
         <TextView
@@ -82,11 +83,10 @@
             android:textColor="@android:color/black"
             android:textSize="14sp" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnIncrease"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:background="@android:color/white"
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:text="+"
@@ -94,13 +94,12 @@
             android:textSize="16sp" />
     </LinearLayout>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnRemove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="46dp"
-        android:layout_marginEnd="8dp"
-        android:backgroundTint="#FF5722"
+        android:background="@drawable/bg_blue3"
         android:text="Remove"
         android:textColor="@android:color/white"
         android:textSize="12sp"

@@ -152,4 +152,10 @@ public interface ApiService {
 
     @GET("api/feedback/order/{orderId}")
     Call<List<ProductFeedback>> getFeedbackByOrderId(@Path("orderId") int orderId);
+
+    @GET("/api/products/recent")
+    Call<List<Product>> getRecentProducts();
+
+    @POST("/api/products/status")
+    Call<List<Product>> getProductsStatus(@Body List<Long> productIds);
 }
