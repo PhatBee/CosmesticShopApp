@@ -28,6 +28,7 @@ import vn.phatbee.cosmesticshopapp.model.PasswordResetResponse;
 import vn.phatbee.cosmesticshopapp.model.Payment;
 import vn.phatbee.cosmesticshopapp.model.Product;
 import vn.phatbee.cosmesticshopapp.model.ProductFeedback;
+import vn.phatbee.cosmesticshopapp.model.ProductSalesDTO;
 import vn.phatbee.cosmesticshopapp.model.RegistrationRequest;
 import vn.phatbee.cosmesticshopapp.model.RegistrationResponse;
 import vn.phatbee.cosmesticshopapp.model.ResetPasswordRequest;
@@ -156,6 +157,12 @@ public interface ApiService {
     @GET("/api/products/recent")
     Call<List<Product>> getRecentProducts();
 
+    @GET("/api/products/top-selling")
+    Call<List<ProductSalesDTO>> getTopSellingProducts();
+
     @POST("/api/products/status")
     Call<List<Product>> getProductsStatus(@Body List<Long> productIds);
+
+    @GET("/api/products")
+    Call<List<Product>> getAllProducts();
 }

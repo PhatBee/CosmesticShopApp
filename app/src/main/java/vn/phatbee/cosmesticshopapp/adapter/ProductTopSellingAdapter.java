@@ -19,6 +19,7 @@ import retrofit2.Response;
 import vn.phatbee.cosmesticshopapp.R;
 import vn.phatbee.cosmesticshopapp.manager.UserSessionManager;
 import vn.phatbee.cosmesticshopapp.model.Product;
+import vn.phatbee.cosmesticshopapp.model.ProductSalesDTO;
 import vn.phatbee.cosmesticshopapp.model.Wishlist;
 import vn.phatbee.cosmesticshopapp.retrofit.ApiService;
 import vn.phatbee.cosmesticshopapp.retrofit.RetrofitClient;
@@ -26,25 +27,25 @@ import vn.phatbee.cosmesticshopapp.retrofit.RetrofitClient;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductRecentAdapter extends RecyclerView.Adapter<ProductRecentAdapter.ProductViewHolder> {
-    private static final String TAG = "ProductRecentAdapter";
+public class ProductTopSellingAdapter extends RecyclerView.Adapter<ProductTopSellingAdapter.TopSellingViewHolder> {
+    private static final String TAG = "TopSellingAdapter";
     private Context context;
-    private List<Product> products;
-    private OnProductRecentClickListener listener;
+    private List<ProductSalesDTO> products;
+    private OnTopSellingClickListener listener;
     private UserSessionManager sessionManager;
 
-    public interface OnProductRecentClickListener {
-        void onProductRecentClick(Product product);
+    public interface OnTopSellingClickListener {
+        void onTopSellingClick(Product product);
     }
 
-    public ProductRecentAdapter(Context context, OnProductRecentClickListener listener, UserSessionManager sessionManager) {
+    public ProductTopSellingAdapter(Context context, OnTopSellingClickListener listener, UserSessionManager sessionManager) {
         this.context = context;
         this.products = new ArrayList<>();
         this.listener = listener;
         this.sessionManager = sessionManager;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(List<ProductSalesDTO> products) {
         this.products.clear();
         this.products.addAll(products);
         notifyDataSetChanged();
@@ -52,15 +53,15 @@ public class ProductRecentAdapter extends RecyclerView.Adapter<ProductRecentAdap
 
     @NonNull
     @Override
-    public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TopSellingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.viewholder_recommend, parent, false);
-        return new ProductViewHolder(view);
+        return new TopSellingViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-        Product product = products.get(position);
-        holder.bind(product);
+    public void onBindViewHolder(@NonNull TopSellingViewHolder holder, int position) {
+        ProductSalesDTO productSalesDTO = products.get(position);
+        holder.bind(productSalesDTO);
     }
 
     @Override
@@ -68,33 +69,37 @@ public class ProductRecentAdapter extends RecyclerView.Adapter<ProductRecentAdap
         return products.size();
     }
 
-    class ProductViewHolder extends RecyclerView.ViewHolder {
+    class TopSellingViewHolder extends RecyclerView.ViewHolder {
         ImageView ivProductImage;
         TextView tvProductName;
         TextView tvProductPrice;
+        TextView tvSalesQuantity;
         ImageView ivWishlist;
         boolean isInWishlist;
 
-        ProductViewHolder(@NonNull View itemView) {
+        TopSellingViewHolder(@NonNull View itemView) {
             super(itemView);
             ivProductImage = itemView.findViewById(R.id.ivProduct);
             tvProductName = itemView.findViewById(R.id.tvProductName);
             tvProductPrice = itemView.findViewById(R.id.tvPrice);
+            tvSalesQuantity = itemView.findViewById(R.id.tvSalesQuantity);
             ivWishlist = itemView.findViewById(R.id.ivWishlist);
 
             itemView.setOnClickListener(v -> {
                 if (listener != null) {
-                    listener.onProductRecentClick(products.get(getAdapterPosition()));
+                    Product product = products.get(getAdapterPosition()).getProduct();
+                    listener.onTopSellingClick(product);
                 }
             });
 
             ivWishlist.setOnClickListener(v -> {
-                Product product = products.get(getAdapterPosition());
+                Product product = products.get(getAdapterPosition()).getProduct();
                 toggleWishlist(product);
             });
         }
 
-        void bind(Product product) {
+        void bind(ProductSalesDTO productSalesDTO) {
+            Product product = productSalesDTO.getProduct();
             tvProductName.setText(product.getProductName() != null ? product.getProductName() : "Unknown Product");
             Double price = product.getPrice();
             if (price != null) {
@@ -107,6 +112,9 @@ public class ProductRecentAdapter extends RecyclerView.Adapter<ProductRecentAdap
                     .placeholder(R.drawable.ic_launcher_background)
                     .error(R.drawable.ic_launcher_background)
                     .into(ivProductImage);
+
+            Long salesQuantity = productSalesDTO.getTotalQuantity();
+            tvSalesQuantity.setText(salesQuantity != null ? "Đã bán: " + salesQuantity : "N/A");
 
             checkWishlistStatus(product);
         }
