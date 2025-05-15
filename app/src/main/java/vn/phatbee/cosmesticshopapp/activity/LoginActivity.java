@@ -30,7 +30,7 @@ import vn.phatbee.cosmesticshopapp.retrofit.RetrofitClient;
 public class LoginActivity extends AppCompatActivity {
     private TextInputEditText editTextUsername, editTextPassword;
     private Button btnLogin;
-    private TextView textViewRegister, textViewForgotPassword;
+    private TextView textViewRegister, textViewForgotPassword, tvSeeAll;
     private UserSessionManager sessionManager;
     private ProgressDialog progressDialog;
 
@@ -59,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Logging in...");
         progressDialog.setCancelable(false);
+        tvSeeAll = findViewById(R.id.tvSeeAll);
 
         // Login button click listener
         btnLogin.setOnClickListener(new View.OnClickListener() {

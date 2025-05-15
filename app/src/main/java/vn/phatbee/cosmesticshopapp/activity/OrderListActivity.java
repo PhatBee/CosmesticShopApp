@@ -1,5 +1,6 @@
 package vn.phatbee.cosmesticshopapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -36,6 +37,9 @@ public class OrderListActivity extends AppCompatActivity {
     private ApiService apiService;
     private ImageView ivBack;
 
+    //Bottom nav
+    private ImageView ivGioHang, ivProfile, ivWishList,ivHome;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +48,12 @@ public class OrderListActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
         ivBack = findViewById(R.id.ivBack);
+
+        //Bottom navigation
+        ivGioHang = findViewById(R.id.ivGioHang);
+        ivProfile = findViewById(R.id.ivProfile);
+        ivWishList = findViewById(R.id.ivYeuThich);
+        ivHome  = findViewById(R.id.ivHome);
 
         sessionManager = new UserSessionManager(this);
         apiService = RetrofitClient.getClient().create(ApiService.class);
@@ -68,6 +78,27 @@ public class OrderListActivity extends AppCompatActivity {
         }).attach();
 
         ivBack.setOnClickListener(v -> finish());
+
+        // Set up click listeners
+        ivGioHang.setOnClickListener(v -> {
+            Intent intent = new Intent(OrderListActivity.this, CartActivity.class);
+            startActivity(intent);
+        });
+
+        ivProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(OrderListActivity.this, ProfileActivity.class);
+            startActivity(intent);
+        });
+
+        ivHome.setOnClickListener(v -> {
+            Intent intent = new Intent(OrderListActivity.this, MainActivity.class);
+            startActivity(intent);
+        });
+
+        ivWishList.setOnClickListener(v -> {
+            Intent intent = new Intent(OrderListActivity.this, WishlistActivity.class);
+            startActivity(intent);
+        });
 
         loadOrders();
     }

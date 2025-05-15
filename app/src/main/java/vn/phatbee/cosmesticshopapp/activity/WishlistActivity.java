@@ -1,5 +1,6 @@
 package vn.phatbee.cosmesticshopapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +31,7 @@ public class WishlistActivity extends AppCompatActivity {
     private List<Wishlist> wishlistItems;
     private UserSessionManager sessionManager;
     private ImageView btnBack;
+    private ImageView ivGioHang, ivProfile, ivDonHang, ivHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,12 @@ public class WishlistActivity extends AppCompatActivity {
         sessionManager = new UserSessionManager(this);
         recyclerView = findViewById(R.id.rvWishlist);
         btnBack = findViewById(R.id.ivBackWish);
+
+        //Bottom navigation
+        ivGioHang = findViewById(R.id.ivGioHang);
+        ivProfile = findViewById(R.id.ivProfile);
+        ivDonHang = findViewById(R.id.ivDonHang);
+        ivHome  = findViewById(R.id.ivHome);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         wishlistItems = new ArrayList<>();
@@ -58,6 +66,28 @@ public class WishlistActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
 
         loadWishlist();
+
+        //Bottom navigation
+        // Set up click listeners
+        ivGioHang.setOnClickListener(v -> {
+            Intent intent = new Intent(WishlistActivity.this, CartActivity.class);
+            startActivity(intent);
+        });
+
+        ivProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(WishlistActivity.this, ProfileActivity.class);
+            startActivity(intent);
+        });
+
+        ivHome.setOnClickListener(v -> {
+            Intent intent = new Intent(WishlistActivity.this, MainActivity.class);
+            startActivity(intent);
+        });
+
+        ivDonHang.setOnClickListener(v -> {
+            Intent intent = new Intent(WishlistActivity.this, OrderListActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void loadWishlist() {
