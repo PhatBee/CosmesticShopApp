@@ -14,13 +14,19 @@ public class Product implements Serializable {
         private String expirationDate;
         private String brand;
         private String origin;
-        private String ingredient;
+    @SerializedName("ingredient")
+
+    private String ingredient;
         private String image;
         private double price;
+    @SerializedName("howToUse")
+
         private String how_to_use;
         private String description;
         private String volume;
         private boolean isActive = true;
+
+
 
 
     public Long getProductId() {

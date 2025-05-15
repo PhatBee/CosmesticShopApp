@@ -54,7 +54,17 @@
                 android:layout_height="64dp"
                 android:layout_gravity="center"
                 android:background="@drawable/circle"
-                tools:srcCompat="@drawable/ic_account" />
+                tools:srcCompat="@drawable/ic_account"
+                android:scaleType="centerCrop"
+                android:contentDescription="Ảnh đại diện"/>
+
+            <Button
+                android:id="@+id/btnSelectImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="Cập nhật" />
 
             <TextView
                 android:id="@+id/tvFullName"
