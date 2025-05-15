@@ -42,11 +42,10 @@ public class WishlistActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.rvWishlist);
         btnBack = findViewById(R.id.ivBackWish);
 
-        //Bottom navigation
         ivGioHang = findViewById(R.id.ivGioHang);
         ivProfile = findViewById(R.id.ivProfile);
         ivDonHang = findViewById(R.id.ivDonHang);
-        ivHome  = findViewById(R.id.ivHome);
+        ivHome = findViewById(R.id.ivHome);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         wishlistItems = new ArrayList<>();
@@ -60,6 +59,13 @@ public class WishlistActivity extends AppCompatActivity {
             public void onAddToCart(Wishlist wishlist) {
                 addToCart(wishlist);
             }
+
+            @Override
+            public void onItemClick(Wishlist wishlist) {
+                Intent intent = new Intent(WishlistActivity.this, ProductDetailsActivity.class);
+                intent.putExtra("PRODUCT_ID", wishlist.getProduct().getProductId());
+                startActivity(intent);
+            }
         });
         recyclerView.setAdapter(wishlistAdapter);
 
@@ -67,8 +73,6 @@ public class WishlistActivity extends AppCompatActivity {
 
         loadWishlist();
 
-        //Bottom navigation
-        // Set up click listeners
         ivGioHang.setOnClickListener(v -> {
             Intent intent = new Intent(WishlistActivity.this, CartActivity.class);
             startActivity(intent);

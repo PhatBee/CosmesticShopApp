@@ -21,6 +21,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
     public interface OnWishlistActionListener {
         void onRemove(Wishlist wishlist);
         void onAddToCart(Wishlist wishlist);
+        void onItemClick(Wishlist wishlist);
     }
 
     public WishlistAdapter(List<Wishlist> wishlistItems, OnWishlistActionListener listener) {
@@ -39,7 +40,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         Wishlist wishlist = wishlistItems.get(position);
         holder.textProductName.setText(wishlist.getProduct().getProductName());
-        holder.textProductPrice.setText(String.format("%.2f VND", wishlist.getProduct().getPrice()));
+        holder.textProductPrice.setText(String.format("%,.0f VND", wishlist.getProduct().getPrice()));
 
         if (wishlist.getProduct().getImage() != null && !wishlist.getProduct().getImage().isEmpty()) {
             Glide.with(context).load(wishlist.getProduct().getImage()).placeholder(R.drawable.ic_launcher_background).into(holder.imageProduct);
@@ -49,6 +50,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
 
         holder.imageHeart.setOnClickListener(v -> listener.onRemove(wishlist));
         holder.ivAddToCart.setOnClickListener(v -> listener.onAddToCart(wishlist));
+        holder.itemView.setOnClickListener(v -> listener.onItemClick(wishlist));
     }
 
     @Override

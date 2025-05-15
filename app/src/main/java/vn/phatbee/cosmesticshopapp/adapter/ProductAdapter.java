@@ -35,7 +35,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = productList.get(position);
         holder.tvProductName.setText(product.getProductName());
-        holder.tvProductPrice.setText(String.format("$%.2f", product.getPrice()));
+        holder.tvProductPrice.setText(String.format(String.format("%,.0f VND", product.getPrice())));
 
         // Load image using Glide or Picasso
         if (product.getImage() != null && !product.getImage().isEmpty()) {

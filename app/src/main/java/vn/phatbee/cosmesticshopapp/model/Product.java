@@ -19,7 +19,7 @@ public class Product implements Serializable {
     private String ingredient;
         private String image;
         private double price;
-    @SerializedName("howToUse")
+    @SerializedName("how_to_use")
 
         private String how_to_use;
         private String description;

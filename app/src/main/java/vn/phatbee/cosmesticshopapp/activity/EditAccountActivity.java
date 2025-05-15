@@ -77,7 +77,7 @@ public class EditAccountActivity extends AppCompatActivity {
         etPhone = findViewById(R.id.etPhone);
         genderSpinner = findViewById(R.id.gender_spinner);
         btnUpdateProfile = findViewById(R.id.btnUpdateProfile);
-        ivBack = findViewById(R.id.ivbackEditAccount);
+        ivBack = findViewById(R.id.ivBackEditAccount);
         ivProfileImage = findViewById(R.id.ivAvatar);
         btnSelectImage = findViewById(R.id.btnSelectImage);
         tvFullName = findViewById(R.id.tvFullName);

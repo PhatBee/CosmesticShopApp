@@ -140,7 +140,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private void displayProductDetails(Product product) {
         tvProductName.setText(product.getProductName());
         tvCategory.setText(product.getCategory() != null ? product.getCategory().getCategoryName() : "Unknown");
-        tvPrice.setText(String.format("%.2f VND", product.getPrice()));
+        tvPrice.setText(String.format("%,.0f VND", product.getPrice()));
         tvBrand.setText(product.getBrand());
         tvVolume.setText(product.getVolume());
         tvOrigin.setText(product.getOrigin());
