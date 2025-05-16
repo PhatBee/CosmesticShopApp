@@ -183,11 +183,6 @@ Chúng tôi hoan nghênh mọi đóng góp! Để đóng góp:
 4. Push lên branch: `git push origin feature/your-feature`.
 5. Tạo Pull Request trên GitHub.
 
-Vui lòng tuân thủ [Quy Tắc Ứng Xử](CODE_OF_CONDUCT.md) và tiêu chuẩn mã nguồn.
-
-## Giấy Phép
-Dự án được cấp phép theo MIT License. Xem chi tiết tại file [LICENSE](LICENSE).
-
 ## Liên Hệ
 - **Tác giả**: Ong Vĩnh Phát, Huỳnh Thị Mỹ Tâm
 - **GitHub**: [PhatBee](https://github.com/PhatBee)
